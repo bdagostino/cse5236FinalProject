@@ -13,6 +13,7 @@ import android.os.Build;
 
 public class SplashScreen extends ActionBarActivity {
 	//Here is a nice and simple test!!!!
+	//Here is another nice and simple test!!!
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
