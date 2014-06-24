@@ -1,19 +1,11 @@
 package edu.osu.guessthatimage;
 
-
-import android.support.v4.app.Fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
 
 public class SplashScreen extends Activity {
-
 	protected boolean active = true;
 	protected int splashTime = 5000;
 	protected int timeIncrement = 100;
@@ -40,8 +32,8 @@ public class SplashScreen extends Activity {
 					// do nothing
 				} finally {
 					finish();
-					//startActivity(new Intent(
-							//"com.wiley.fordummies.androidsdk.tictactoe.Login"));
+					startActivity(new Intent(
+							"edu.osu.guessthatimage.LoginScreen"));
 				}
 			}
 		};
