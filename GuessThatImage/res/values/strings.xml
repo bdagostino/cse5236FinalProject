@@ -16,5 +16,6 @@
     <string name="settings">Game Settings</string>
     <string name="help">Help</string>
     <string name="leader_board">Leader Board</string>
+    <string name="title_activity_game_session">GameSession</string>
 
 </resources>
