@@ -8,6 +8,7 @@ import java.util.Scanner;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,12 +19,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.os.Build;
 import android.preference.PreferenceManager;
 
-public class GameSession extends ActionBarActivity {
-	private static EditText guessField;
+public class GameSession extends Activity implements OnClickListener {
+	private static TextView guessField;
 	private static String currentWord;
 	private static final int SETTINGS_NUM_IMAGES_DISPLAYED = 4;
 	private static final int SETTINGS_TIMER = 4;
@@ -37,16 +41,18 @@ public class GameSession extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_session);
-
-		if (savedInstanceState == null) {
-			getSupportFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
+		guessField = (EditText) findViewById(R.id.guess_text);
+		guessField.setText("Hello");
+		if (savedInstanceState != null) {
+			String guess = savedInstanceState.getString("GUESS");
+			guessField.setText(guess);
 		}
+		Button btnGuess = (Button) findViewById(R.id.guess_button);
+		btnGuess.setOnClickListener(this);
 		playerScore = new Score(0);
 	    dictionary = new ArrayList<String>();
 	    guessMade = false;
 	    populateDictionary();
-		guessField = (EditText) findViewById(R.id.guess_text);
 	}
 	 private static void populateDictionary() {
 	        dictionary.add("Banana");
@@ -69,42 +75,29 @@ public class GameSession extends ActionBarActivity {
 	 public void onResume() {
 			super.onResume();
 			playNewGame();
+			System.out.println("Resumed");
 		}
-	 
+		/**
+		 * Stores the value of {@code result} on the {@code Bundle}.
+		 * 
+		 * @param savedInstanceState
+		 *            The {@code Bundle} on which the value should be stored.
+		 */
+		@Override
+		protected void onSaveInstanceState(Bundle savedInstanceState) {
+			String guess = guessField.getText().toString();
+			savedInstanceState.putString("GUESS", guess);
+		}
 	private void playNewGame()
 	{
+		setContentView(R.layout.activity_game_session);
 		boolean skipped = false;
 		int timer = SETTINGS_TIMER;
-        while (timer > 0) {
-            displayImages(dictionary, SETTINGS_NUM_IMAGES_DISPLAYED);
-            System.out.println("Guess the word: ");
-            while(!guessMade)
-            { }
-            String guess = getGuess();
-            skipped = skip(guess);
-            guessMade = false;
-            while (!guess.equals(dictionary.get(CURRENT_INDEX)) && !skipped) {
-                incorrectAnswer();
-                while(!guessMade)
-                { }
-                guess = getGuess();
-                skipped = skip(guess);
-            }
-            if (skipped) {
-                playerScore.skipped();
-                skipped = false;
-                skipResponse();
-            } else {
-                playerScore.correctAnswer();
-                correctAnswer();
-            }
-            CURRENT_INDEX++;
-            timer--;
-        }
+		System.out.println("Player new game");
 	}
 	private static String getGuess() {
-		String temp = guessField.getText().toString().toLowerCase();
-        return temp;
+		//String temp = guessField.getText().toString().toLowerCase();
+        return "";
     }
 
     private static void incorrectAnswer() {
@@ -166,12 +159,24 @@ public class GameSession extends ActionBarActivity {
 		}
 	}
 	private void checkGuess() {
-		this.guessMade = true;
+		String temp = guessField.getText().toString().toLowerCase();
+		System.out.println("Checkguess");
+		if(temp.equals(dictionary.get(CURRENT_INDEX)))
+		{
+			System.out.println("Correct guess");
+		}
+		else if(temp.equals("skip"))
+		{
+			System.out.println("skipped!");
+		}
+		guessField.setText("");
 	}
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.guess_button:
+			System.out.println("Button pressed");
 			checkGuess();
+			
 			break;
 		}
 	}

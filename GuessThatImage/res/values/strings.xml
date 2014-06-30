@@ -17,5 +17,6 @@
     <string name="help">Help</string>
     <string name="leader_board">Leader Board</string>
     <string name="title_activity_game_session">GameSession</string>
+    <string name="title_activity_game">Game</string>
 
 </resources>
