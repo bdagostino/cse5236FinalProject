@@ -11,7 +11,7 @@ import android.preference.PreferenceManager;
 public class Settings extends PreferenceActivity{
 	
 	private final static String GAME_TIME = "time_setting";
-	private final static String NUMBER_OF£ßPIC = "number_setting";
+	private final static String NUMBER_OF_PIC = "number_setting";
 	private final static String GAME_TIME_DEF = "10";
 	private final static String NUMBER_OF_PIC_DEF = "4";
 
@@ -30,7 +30,7 @@ public class Settings extends PreferenceActivity{
 	
 	public static String getNumber(Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context)
-				.getString(NUMBER_OF£ßPIC, NUMBER_OF_PIC_DEF);
+				.getString(NUMBER_OF_PIC, NUMBER_OF_PIC_DEF);
 	}
 	
 	

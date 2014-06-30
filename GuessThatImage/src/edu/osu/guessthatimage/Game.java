@@ -12,9 +12,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
-public class Game extends Activity implements OnClickListener {
+public class Game extends Activity implements OnClickListener, AccelerometerListener{
 	
 	private static Button btnGuess;
 	private EditText guessField;
@@ -56,11 +57,33 @@ public class Game extends Activity implements OnClickListener {
 	        dictionary.add("Dinosaur");
 	        dictionary.add("Apple");
 	        dictionary.add("Cat");
+	        dictionary.add("Banana");
+	        dictionary.add("Dinosaur");
+	        dictionary.add("Apple");
+	        dictionary.add("Cat");
+	        dictionary.add("Banana");
+	        dictionary.add("Dinosaur");
+	        dictionary.add("Apple");
+	        dictionary.add("Cat");
+	        dictionary.add("Banana");
+	        dictionary.add("Dinosaur");
+	        dictionary.add("Apple");
+	        dictionary.add("Cat");
+	        dictionary.add("Banana");
+	        dictionary.add("Dinosaur");
+	        dictionary.add("Apple");
+	        dictionary.add("Cat");
 	    }
 	 public void onResume() {
 			super.onResume();
 			//playNewGame();
 			System.out.println("Resumed");
+			 //Check device supported Accelerometer senssor or not
+            if (AccelerometerManager.isSupported(this)) {
+                 
+                //Start Accelerometer Listening
+                AccelerometerManager.startListening(this);
+            }
 		}
 	 
 	 private void checkGuess() {
@@ -71,13 +94,6 @@ public class Game extends Activity implements OnClickListener {
 				System.out.println("Correct guess");
 				playerScore.correctAnswer();
 				guessField.setText("CORRECT");
-				CURRENT_INDEX ++;
-			}
-			else if(temp.equals("skip"))
-			{
-				System.out.println("skipped!");
-				guessField.setText("SKIPPED");
-				playerScore.skipped();
 				CURRENT_INDEX ++;
 			}
 			guessField.setText("");
@@ -105,4 +121,59 @@ public class Game extends Activity implements OnClickListener {
 				break;
 			}
 		}
+		
+		// SHAKING STUFF
+		public void onAccelerationChanged(float x, float y, float z) {
+	        // TODO Auto-generated method stub
+	         
+	    }
+	 
+	    public void onShake(float force) {
+	    		// Do your stuff here
+	    		skipped();
+	        	// Called when Motion Detected
+	    		Toast.makeText(getBaseContext(), "Motion detected",
+	    				Toast.LENGTH_SHORT).show();
+	    }
+	    
+	    private void skipped()
+	    {
+	    	guessField.setText("SKIPPED " + CURRENT_INDEX);
+	    	CURRENT_INDEX ++;
+	    	playerScore.skipped();
+	    }
+	    @Override
+	    public void onStop() {
+	            super.onStop();
+	             
+	            //Check device supported Accelerometer senssor or not
+	            if (AccelerometerManager.isListening()) {
+	                 
+	                //Start Accelerometer Listening
+	                AccelerometerManager.stopListening();
+	                 
+	                Toast.makeText(getBaseContext(), "onStop Accelerometer Stoped",
+	                         Toast.LENGTH_SHORT).show();
+	            }
+	            
+	    }
+	    @Override
+	    public void onDestroy() {
+	        super.onDestroy();
+	        Log.i("Sensor", "Service  distroy");
+	         
+	        //Check device supported Accelerometer senssor or not
+	        if (AccelerometerManager.isListening()) {
+	             
+	            //Start Accelerometer Listening
+	            AccelerometerManager.stopListening();
+	             
+	            Toast.makeText(getBaseContext(), "onDestroy Accelerometer Stoped",
+	                   Toast.LENGTH_SHORT).show();
+	        }
+	             
+	    }
+		
+		
+		
 }

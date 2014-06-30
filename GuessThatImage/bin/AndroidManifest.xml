@@ -47,16 +47,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="edu.osu.guessthatimage.GameSession"
-            android:label="@string/title_activity_game_session" >
-        </activity>
-        <activity
             android:name="edu.osu.guessthatimage.Game"
             android:label="@string/title_activity_game" >
         </activity>
         <activity
             android:name="edu.osu.guessthatimage.Settings"
             android:label="@string/title_activity_settings" >
+            android:name="edu.osu.guessthatimage.Game"
+            android:label="@string/title_activity_game" >
         </activity>
     </application>
 
