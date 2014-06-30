@@ -50,6 +50,10 @@
             android:name="edu.osu.guessthatimage.GameSession"
             android:label="@string/title_activity_game_session" >
         </activity>
+        <activity
+            android:name="edu.osu.guessthatimage.Settings"
+            android:label="@string/title_activity_settings" >
+        </activity>
     </application>
 
 </manifest>

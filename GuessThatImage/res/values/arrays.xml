@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="game_time">
+        <item >Easy - 10 Min</item>
+        <item >Medium - 5 Min</item>
+        <item >Hard - 2 Min</item>
+    </string-array>
+    <string-array name="number_of_pictures">
+        <item >Easy - 4 Pictures</item>
+        <item >Mediun - 2 Pictures</item>
+        <item >Hard - 1 Picture</item>
+    </string-array>
+    <string-array name="number_of_picture_value">
+        <item >4</item>
+        <item >2</item>
+        <item >1</item>
+    </string-array>
+    <string-array name="game_time_value">
+        <item >10</item>
+        <item >5</item>
+        <item >2</item>
+    </string-array>
+    
+</resources>

@@ -17,5 +17,18 @@
     <string name="help">Help</string>
     <string name="leader_board">Leader Board</string>
     <string name="title_activity_game_session">GameSession</string>
+    <string name="settings_title">System Settings</string>
+    <string name="settings_summary">Set the game time and number of images be given</string>
+    <string name="time_setting_title">Time</string>
+    <string name="time_setting_summary">Set the time of game</string>
+    <string name="number_setting_title">Number of picture</string>
+    <string name="number_setting_summary">Set the number of pictures be given per word</string>
+    <string name="time_setting_key">time_setting</string>
+    <string name="number_setting_key">number_setting</string>
+    <string name="settings_key">settings</string>
+    <string name="confirm">confirm</string>
+    <string name="cancel">cancel</string>
+    <string name="time_default">10</string>
+    <string name="number_default">4</string>
 
 </resources>
