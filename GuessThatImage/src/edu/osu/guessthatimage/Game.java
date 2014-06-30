@@ -2,18 +2,16 @@ package edu.osu.guessthatimage;
 
 import java.util.ArrayList;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 public class Game extends Activity implements OnClickListener, AccelerometerListener{
 	
@@ -28,6 +26,11 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	
 	private static String GUESS_KEY = "GUESS";
 	private static String SCORE_KEY = "SCORE";
+	
+	private static Button btnTime;
+	private static TextView timeNum;
+	private int time = 10;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +54,51 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			playerScore.setScore(savedInstanceState.getInt(SCORE_KEY));
 		}
 	    
+	    timeNum = (TextView)findViewById(R.id.time_remaining);
+	    btnTime = (Button)findViewById(R.id.start_time);
+	    btnTime.setOnClickListener(this);
+	    
+	    time = Integer.parseInt(Settings.getTime(getApplicationContext()));
+
+	    
 	}
+	
+	private Handler timeHandler = new Handler();
+	
+	class ClassCut implements Runnable{
+        @Override
+        public void run() {
+            // TODO Auto-generated method stub
+            while(time > 0){
+                time--;
+                timeHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub
+                        timeNum.setText(time + "");
+                    }
+                });
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            //下面是倒计时结束逻辑
+            timeHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    // TODO Auto-generated method stub
+                	int temp = Integer.parseInt(Settings.getTime(getApplicationContext()));
+                    timeNum.setText(temp + "");
+                    Toast.makeText(Game.this, "timeout!", Toast.LENGTH_LONG).show();
+                }
+            });
+            time = Integer.parseInt(Settings.getTime(getApplicationContext()));
+        }
+    }
+
+	
 	 private static void populateDictionary() {
 	        dictionary.add("Banana");
 	        dictionary.add("Dinosaur");
@@ -118,6 +165,9 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			switch (v.getId()) {
 			case R.id.button1:
 				checkGuess();
+				break;
+			case R.id.start_time:
+				new Thread(new ClassCut()).start();
 				break;
 			}
 		}
