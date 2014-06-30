@@ -30,5 +30,7 @@
     <string name="cancel">cancel</string>
     <string name="time_default">10</string>
     <string name="number_default">4</string>
+    <string name="title_activity_game">Game</string>
+
 
 </resources>

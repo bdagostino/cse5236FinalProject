@@ -80,7 +80,7 @@ public class OptionMenu extends Activity implements OnClickListener{
 		switch(v.getId())
 		{
 		case R.id.buttonNewGame:
-			//startActivity(new Intent(this, GameSession.class));
+			startActivity(new Intent(this, GameSession.class));
 			break;
 		case R.id.buttonSettings:
 			startActivity(new Intent(this, Settings.class));
