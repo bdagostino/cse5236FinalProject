@@ -69,6 +69,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
         @Override
         public void run() {
             // TODO Auto-generated method stub
+        	
             while(time > 0){
                 time--;
                 timeHandler.post(new Runnable() {
@@ -94,7 +95,9 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
                     Toast.makeText(Game.this, "timeout!", Toast.LENGTH_LONG).show();
                 }
             });
-            time = Integer.parseInt(Settings.getTime(getApplicationContext()));
+            time = Integer.parseInt(Settings.getTime(getApplicationContext()));   
+            btnTime = (Button)findViewById(R.id.start_time);
+            btnTime.setClickable(true);
         }
     }
 
@@ -167,6 +170,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 				checkGuess();
 				break;
 			case R.id.start_time:
+				btnTime.setClickable(false);
 				new Thread(new ClassCut()).start();
 				break;
 			}
