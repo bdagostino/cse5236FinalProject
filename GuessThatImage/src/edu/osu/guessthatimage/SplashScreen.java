@@ -34,6 +34,7 @@ public class SplashScreen extends Activity {
 					finish();
 					startActivity(new Intent(
 							"edu.osu.guessthatimage.LoginScreen"));
+					//startActivity(new Intent("edu.osu.guessthatimage.LeaderBoard"));
 				}
 			}
 		};
