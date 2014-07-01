@@ -85,7 +85,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
                     e.printStackTrace();
                 }
             }
-            //下面是倒计时结束逻辑
+            
             timeHandler.post(new Runnable() {
                 @Override
                 public void run() {

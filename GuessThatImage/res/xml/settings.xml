@@ -4,7 +4,24 @@
     android:layout_height="match_parent"
     android:summary="@string/settings_summary"
     android:title="@string/settings_title" android:key="@string/settings_key">
-    <ListPreference android:key="@string/time_setting_key" android:summary="@string/time_setting_summary" android:title="@string/time_setting_title" android:entries="@array/game_time" android:entryValues="@array/game_time_value" android:positiveButtonText="@string/confirm" android:negativeButtonText="@string/cancel" android:defaultValue="@string/time_default"/>
-    <ListPreference android:key="@string/number_setting_key" android:summary="@string/number_setting_summary" android:title="@string/number_setting_title" android:entries="@array/number_of_pictures" android:entryValues="@array/number_of_picture_value" android:positiveButtonText="@string/confirm" android:negativeButtonText="@string/cancel" android:defaultValue="@string/number_default"/>
+    <ListPreference 
+        android:key="@string/time_setting_key" 
+        android:summary="@string/time_setting_summary" 
+        android:title="@string/time_setting_title" 
+        android:entries="@array/game_time" 
+        android:entryValues="@array/game_time_value" 
+        android:positiveButtonText="@string/confirm" 
+        android:negativeButtonText="@string/cancel" 
+        android:defaultValue="@string/time_default"/>
+    
+    <ListPreference 
+        android:key="@string/number_setting_key" 
+        android:summary="@string/number_setting_summary" 
+        android:title="@string/number_setting_title" 
+        android:entries="@array/number_of_pictures" 
+        android:entryValues="@array/number_of_picture_value" 
+        android:positiveButtonText="@string/confirm" 
+        android:negativeButtonText="@string/cancel" 
+        android:defaultValue="@string/number_default"/>
 
 </PreferenceScreen>

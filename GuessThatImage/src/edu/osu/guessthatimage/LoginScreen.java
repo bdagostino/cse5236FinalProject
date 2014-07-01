@@ -1,18 +1,24 @@
 package edu.osu.guessthatimage;
 
+import java.util.List;
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
 public class LoginScreen extends Activity implements OnClickListener {
-	//private DatabaseHelper dh;
+	private DatabaseHelperAccounts accountDb;
 	private EditText userNameEditableField;
 	private EditText passwordEditableField;
-	//private final static String OPT_NAME = "name";
+	private final static String OPT_NAME = "name";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -30,13 +36,13 @@ public class LoginScreen extends Activity implements OnClickListener {
 	}
 
 	private void checkLogin() {
-		startActivity(new Intent(this, OptionMenu.class));
-		finish();
-		/*
+		//startActivity(new Intent(this, OptionMenu.class));
+		//finish();
+		
 		String username = this.userNameEditableField.getText().toString();
 		String password = this.passwordEditableField.getText().toString();
-		this.dh = new DatabaseHelper(this);
-		List<String> names = this.dh.selectAll(username, password);
+		this.accountDb = new DatabaseHelperAccounts(this);
+		List<String> names = this.accountDb.selectAll(username, password);
 		if (names.size() > 0) { // Login successful
 			// Save username as the name of the player
 			SharedPreferences settings = PreferenceManager
@@ -46,8 +52,7 @@ public class LoginScreen extends Activity implements OnClickListener {
 			editor.commit();
 
 			// Bring up the GameOptions screen
-			startActivity(new Intent(this, GameOptions.class));
-//			 startActivity(new Intent(this, DummyActivity.class));
+			startActivity(new Intent(this, OptionMenu.class));
 			finish();
 		} else {
 			// Try again?
@@ -61,7 +66,7 @@ public class LoginScreen extends Activity implements OnClickListener {
 								}
 							}).show();
 		}
-		*/
+		
 	}
 
 	public void onClick(View v) {
@@ -73,8 +78,7 @@ public class LoginScreen extends Activity implements OnClickListener {
 			finish();
 			break;
 		case R.id.new_user_button:
-			//startActivity(new Intent(this, Account.class));
-			finish();
+			startActivity(new Intent(this, SignUp.class));
 			break;
 		}
 	}

@@ -31,6 +31,12 @@
     <string name="time_default">10</string>
     <string name="number_default">4</string>
     <string name="title_activity_game">Game</string>
+    <string name="create_new_account">Sign Up For New Account</string>
+    <string name="new_username">Enter Username:</string>
+    <string name="new_password">Enter Password:</string>
+    <string name="confirm_password">Comfirm Your Password</string>
+    <string name="signup_done">Sign up!</string>
+    <string name="title_activity_signup">signup</string>
 
 
 </resources>
