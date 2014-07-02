@@ -86,7 +86,7 @@ public class OptionMenu extends Activity implements OnClickListener{
 			startActivity(new Intent(this, Settings.class));
 			break;
 		case R.id.buttonHelp:
-			//startActivity(new Intent(this, Help.class));
+			startActivity(new Intent(this, Help.class));
 			break;
 		case R.id.buttonLeaderBoard:
 			startActivity(new Intent(this, LeaderBoard.class));

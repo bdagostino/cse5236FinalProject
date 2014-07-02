@@ -39,5 +39,8 @@
     <string name="title_activity_signup">signup</string>
     <string name="title_activity_leader_board">LeaderBoard</string>
     <string name="leader_board_title">Leader Board</string>
+    <string name="title_activity_help">Help</string>
+    
+    <string name="introduction">In this game, each time you will be given a collection of images retrieved from Google image search engine using a single word, and you need to guess which word is used. You will gain points through correct guessing. Bad guessing won’t decrease your points, but your time is limited. Your can also skip hard word, which will results in losing points. You can set the time and number of images given to you in the game setting menu.</string>
 
 </resources>
