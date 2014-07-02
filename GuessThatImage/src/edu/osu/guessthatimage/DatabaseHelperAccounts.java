@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseHelperAccounts {
-	   private static final String DATABASE_NAME = "GuessThatImage.db";
+	   private static final String DATABASE_NAME = "GuessThatImage0.db";
 	   private static final int DATABASE_VERSION = 1;
 	   private static final String TABLE_ACCOUNT = "Accounts";
 	   private Context context;
@@ -40,9 +40,9 @@ public class DatabaseHelperAccounts {
 	      @Override
 	      public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-	         Log.w("Example", "Upgrading database; this will drop and recreate the tables.");
-	         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ACCOUNT);
-	         onCreate(db);
+	         //Log.w("Example", "Upgrading database; this will drop and recreate the tables.");
+	         //db.execSQL("DROP TABLE IF EXISTS " + TABLE_ACCOUNT);
+	         //onCreate(db);
 	      }
 	   }
 	   

@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class databaseHelperEasyTen {
-	private static final String DATABASE_NAME = "GuessThatImage.db";
-	private static final int DATABASE_VERSION = 4;
+	private static final String DATABASE_NAME = "GuessThatImage2.db";
+	private static final int DATABASE_VERSION = 1;
 	private static final String TABLE_EASY_TENMIN = "Easy_10";//"Difficulty: Easy, Time: 10 min";
 	private Context context;
 	private SQLiteDatabase db;
@@ -40,9 +40,9 @@ public class databaseHelperEasyTen {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-       Log.w("Example", "Upgrading database; this will drop and recreate the tables.");
-       db.execSQL("DROP TABLE IF EXISTS " + TABLE_EASY_TENMIN);
-       onCreate(db);
+       //Log.w("Example", "Upgrading database; this will drop and recreate the tables.");
+       //db.execSQL("DROP TABLE IF EXISTS " + TABLE_EASY_TENMIN);
+       //onCreate(db);
     }
  }
  
