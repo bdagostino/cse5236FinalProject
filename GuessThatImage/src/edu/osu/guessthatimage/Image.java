@@ -1,5 +1,7 @@
 package edu.osu.guessthatimage;
 
+import java.util.ArrayList;
+
 /**
  * Put a short phrase describing the program here.
  * 
@@ -8,24 +10,37 @@ package edu.osu.guessthatimage;
  */
 public final class Image {
 
-    private String text;
-    private int numImages;
+    private String URL;
+    private ArrayList<String> links;
 
-    public Image(String text, int num) {
-        this.text = text;
-        this.numImages = num;
+    public Image(String url) {
+    	this.URL = url;
+    	links = new ArrayList<String>();
+    }
+    public Image() {
+    	this.URL = "";
+    	links = new ArrayList<String>();
+    }
+    public String getURL() {
+        return this.URL;
+    }
+    
+    public void addLink(String url)
+    {
+    	links.add(url);
+    }
+    
+    public ArrayList<String> getLinks(){
+return links;
+}
+    public void setURL(String url)
+    {
+    	this.URL = url;
     }
 
-    public String getText() {
-        return this.text;
+    public String toString()
+    {
+    	return this.URL;
     }
-
-    public void fetchImages() {
-    }
-
-    public void displayImages() {
-
-    }
-
 
 }

@@ -124,9 +124,9 @@ public class GameSession extends ActionBarActivity {
     }
     private static void displayImages(ArrayList<String> dictionary, int num) {
         String currentWord = dictionary.get(CURRENT_INDEX);
-        Image image = new Image(currentWord, num);
-        image.fetchImages();
-        image.displayImages();
+//        Image image = new Image(currentWord, num);
+//        image.fetchImages();
+//        image.displayImages();
     }
 		
 	@Override

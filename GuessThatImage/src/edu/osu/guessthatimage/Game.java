@@ -1,8 +1,17 @@
 package edu.osu.guessthatimage;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
+import org.json.JSONException;
+
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -10,6 +19,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -165,23 +175,23 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
         String time = Settings.getTime(getApplicationContext());
         String difficulty = Settings.getNumber(getApplicationContext());
        
-        if(time==two && difficulty==easy){
+        if(time.equals(two) && difficulty.equals(easy)){
                         this.dh1.insert("Hello", "25");
-                }else if(time==five && difficulty==easy){
+                }else if(time.equals(five) && difficulty.equals(easy)){
                 		this.dh2.insert("hello", "15");
-                }else if(time==ten && difficulty==easy){
+                }else if(time.equals(ten) && difficulty.equals(easy)){
                 		this.dh3.insert("hello", "15");
-                }else if(time==two && difficulty==medium){
+                }else if(time.equals(two) && difficulty.equals(medium)){
                 		this.dh4.insert("hello", "15");
-                }else if(time==five && difficulty==medium){
+                }else if(time.equals(five) && difficulty.equals(medium)){
                 		this.dh5.insert("hello", "15");
-                }else if(time==ten && difficulty==medium){
+                }else if(time.equals(ten) && difficulty.equals(medium)){
                 		this.dh6.insert("hello", "15");
-                }else if(time==two && difficulty==hard){
+                }else if(time.equals(two) && difficulty.equals(hard)){
                 		this.dh7.insert("hello", "15");
-                }else if(time==five && difficulty==hard){
+                }else if(time.equals(five) && difficulty.equals(hard)){
                 		this.dh8.insert("hello", "15");
-                }else if(time==ten && difficulty==hard){
+                }else if(time.equals(ten) && difficulty.equals(hard)){
                 		this.dh9.insert("hello", "15");
                 }else{
                         Toast.makeText(getBaseContext(), "Fucking Error",
@@ -191,26 +201,26 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 
 	
 	 private static void populateDictionary() {
-	        dictionary.add("Banana");
-	        dictionary.add("Dinosaur");
-	        dictionary.add("Apple");
+	        dictionary.add("Armored Core");
+	        dictionary.add("Planetside");
+	        dictionary.add("Team Fortress 2");
+	        dictionary.add("Katia Managan");
+	        dictionary.add("Left 4 Dead");
+	        dictionary.add("League of Legends");
+	        dictionary.add("Nami");
+	        dictionary.add("Yasuo");
+	        dictionary.add("Phone");
+	        dictionary.add("TV");
+	        dictionary.add("Car");
 	        dictionary.add("Cat");
-	        dictionary.add("Banana");
-	        dictionary.add("Dinosaur");
-	        dictionary.add("Apple");
-	        dictionary.add("Cat");
-	        dictionary.add("Banana");
-	        dictionary.add("Dinosaur");
-	        dictionary.add("Apple");
-	        dictionary.add("Cat");
-	        dictionary.add("Banana");
-	        dictionary.add("Dinosaur");
-	        dictionary.add("Apple");
-	        dictionary.add("Cat");
-	        dictionary.add("Banana");
-	        dictionary.add("Dinosaur");
-	        dictionary.add("Apple");
-	        dictionary.add("Cat");
+	        dictionary.add("VALVe");
+	        dictionary.add("Gabe Newell");
+	        dictionary.add("Phreak");
+	        dictionary.add("In Flames");
+	        dictionary.add("Skyrim");
+	        dictionary.add("Oblivion");
+	        dictionary.add("Motorstorm");
+	        dictionary.add("Metal");
 	    }
 	 public void onResume() {
 			super.onResume();
@@ -222,6 +232,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
                 //Start Accelerometer Listening
                 AccelerometerManager.startListening(this);
             }
+            new JSONWeatherTask().execute(dictionary.get(CURRENT_INDEX));
 		}
 	 
 	 private void checkGuess() {
@@ -233,6 +244,15 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 				playerScore.correctAnswer();
 				guessField.setText("CORRECT");
 				CURRENT_INDEX ++;
+				Toast.makeText(getBaseContext(), "Correct (+2)",
+	    				Toast.LENGTH_SHORT).show();
+				new JSONWeatherTask().execute(dictionary.get(CURRENT_INDEX));
+			}
+			else
+			{
+				Toast.makeText(getBaseContext(), "Incorrect",
+	    				Toast.LENGTH_SHORT).show();
+				//btnGuess.setClickable(true);
 			}
 			guessField.setText("");
 		}
@@ -257,6 +277,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			switch (v.getId()) {
 			case R.id.button1:
 				checkGuess();
+				//btnGuess.setClickable(false);
 				break;
 			case R.id.start_time:
 				btnTime.setClickable(false);
@@ -284,6 +305,9 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	    	guessField.setText("SKIPPED " + CURRENT_INDEX);
 	    	CURRENT_INDEX ++;
 	    	playerScore.skipped();
+	    	Toast.makeText(getBaseContext(), "Skipped (-1)",
+    				Toast.LENGTH_SHORT).show();
+	    	new JSONWeatherTask().execute(dictionary.get(CURRENT_INDEX));
 	    }
 	    @Override
 	    public void onStop() {
@@ -316,7 +340,123 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	        }
 	             
 	    }
-		
-		
+	    /**
+		 * An asynchronous task to fetch weather data from the server.
+		 * 
+		 * @author swaroop
+		 * 
+		 */
+		class JSONWeatherTask extends AsyncTask<String, Integer, ArrayList<Bitmap>> {
+
+			private static final String TAG = "JSONGoogleTask";
+
+			@Override
+			protected ArrayList<Bitmap> doInBackground(String... params) {
+				String data = null;
+				try {
+					data = ((new GoogleImageHTTPClient()).getImageData(params[0]));
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				Log.d(TAG, data);
+				Image image = null;
+				try {
+					image = (new ImageParser(data)).getImage();
+				} catch (JSONException e) {
+					e.printStackTrace();
+					Log.d(TAG, "Image parse error");
+				}
+				ArrayList<Bitmap> pictures = new ArrayList<Bitmap>();
+				for(int i = 0; i < 4; i ++)
+				{
+					Log.d("Post", "View received");
+					URL URL = null;
+					try {
+						URL = new URL(image.getLinks().get(i));
+						Log.d("Post", "URL Created");
+					} catch (MalformedURLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						Log.d("Post", "URL Failed");
+					}
+					try {
+						Bitmap bitmap = BitmapFactory.decodeStream(URL.openConnection().getInputStream());
+						if(bitmap != null)
+						{
+							Bitmap resizedbitmap = Bitmap.createScaledBitmap(bitmap, 100, 100, true);
+							pictures.add(resizedbitmap);
+						}
+						else
+						{
+						pictures.add(bitmap);	
+						}	
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						Log.d("Post", "Bitmap Failed");
+					}
+				}
+				
+				return pictures;
+			}
+
+			@Override
+			protected void onPostExecute(ArrayList<Bitmap> bmp) {
+				if (bmp == null) {
+					return;
+				}
+				ImageView view = (ImageView)findViewById(R.id.imageView1);
+				view.setImageBitmap(bmp.get(0));
+				view = (ImageView)findViewById(R.id.imageView2);
+				view.setImageBitmap(bmp.get(1));
+				view = (ImageView)findViewById(R.id.imageView3);
+				view.setImageBitmap(bmp.get(2));
+				view = (ImageView)findViewById(R.id.imageView4);
+				view.setImageBitmap(bmp.get(3));
+				//btnGuess.setClickable(true);
+//				Log.d("Post", image.toString());
+//	    		ImageView view = (ImageView)findViewById(R.id.imageView1);
+//	    		Log.d("Post", "View received");
+//	    		URL URL = null;
+//				try {
+//					URL = new URL(image.getURL());
+//					Log.d("Post", "URL Created");
+//				} catch (MalformedURLException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//					Log.d("Post", "URL Failed");
+//				}
+//	    		Bitmap bmp = null;
+//				try {
+//					bmp = BitmapFactory.decodeStream(URL.openConnection().getInputStream());
+//					Log.d("Post", "Bitmap Created");
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//					Log.d("Post", "Bitmap Failed");
+//				}
+//				
+//	    		view.setImageBitmap(bmp);
+			}
+
+		}
+
+
+public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
+    int width = bm.getWidth();
+    int height = bm.getHeight();
+    float scaleWidth = ((float) newWidth) / width;
+    float scaleHeight = ((float) newHeight) / height;
+    // CREATE A MATRIX FOR THE MANIPULATION
+    Matrix matrix = new Matrix();
+    // RESIZE THE BIT MAP
+    matrix.postScale(scaleWidth, scaleHeight);
+
+    // "RECREATE" THE NEW BITMAP
+    Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+    return resizedBitmap;
+}
+
+
 		
 }
