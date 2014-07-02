@@ -30,7 +30,12 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	private static Button btnTime;
 	private static TextView timeNum;
 	private int time = 10;
+	private static TextView scoreNum;
+	private int currentScore = 0;
+	//private int tempScore = 0;
 	
+	private Thread timeThread = new Thread(new timeCount());
+	private Thread scoreThread = new Thread(new scoreCount());
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,21 +62,26 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	    timeNum = (TextView)findViewById(R.id.time_remaining);
 	    btnTime = (Button)findViewById(R.id.start_time);
 	    btnTime.setOnClickListener(this);
+	    scoreNum = (TextView)findViewById(R.id.current_score);
 	    
 	    time = Integer.parseInt(Settings.getTime(getApplicationContext()));
-
 	    
+	    currentScore = 0;
+
+	    scoreThread.start();
 	}
 	
 	private Handler timeHandler = new Handler();
+	private Handler scoreHandler = new Handler();
 	
-	class ClassCut implements Runnable{
+	class timeCount implements Runnable{
         @Override
         public void run() {
             // TODO Auto-generated method stub
+        	currentScore = 0;
+        	//tempScore = 0;
         	
             while(time > 0){
-                time--;
                 timeHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -84,6 +94,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                time--;
             }
             
             timeHandler.post(new Runnable() {
@@ -100,6 +111,28 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
             btnTime.setClickable(true);
         }
     }
+	
+	class scoreCount implements Runnable{
+		@Override
+		public void run(){
+			//currentScore = playerScore.getScore();
+			//tempScore = playerScore.getScore();
+			
+			while(true){
+				scoreHandler.post(new Runnable(){
+					public void run(){
+						currentScore = playerScore.getScore();
+						scoreNum.setText(currentScore + "");
+					}
+				});
+				try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+			}
+		}
+	}
 
 	
 	 private static void populateDictionary() {
@@ -164,6 +197,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			int score = playerScore.getScore();
 			savedInstanceState.putInt(SCORE_KEY, score);
 		}
+		
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.button1:
@@ -171,7 +205,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 				break;
 			case R.id.start_time:
 				btnTime.setClickable(false);
-				new Thread(new ClassCut()).start();
+				timeThread.start();
 				break;
 			}
 		}

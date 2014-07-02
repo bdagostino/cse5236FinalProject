@@ -40,11 +40,6 @@
             android:launchMode="standard"
             android:permission="edu.osu.guessthatimage.LAUNCHACTIVITY"
             android:screenOrientation="unspecified" >
-            <intent-filter>
-                <action android:name="edu.osu.guessthatimage.LoginScreen" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
         </activity>
         <activity
             android:name="edu.osu.guessthatimage.Game"
@@ -52,9 +47,7 @@
         </activity>
         <activity
             android:name="edu.osu.guessthatimage.Settings"
-            android:label="@string/title_activity_settings" >
-            android:name="edu.osu.guessthatimage.Game"
-            android:label="@string/title_activity_game" >
+            android:label="@string/title_activity_settings" >
         </activity>
         <activity
             android:name="edu.osu.guessthatimage.LeaderBoard"
@@ -64,6 +57,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="edu.osu.guessthatimage.SignUp">
         </activity>
     </application>
 

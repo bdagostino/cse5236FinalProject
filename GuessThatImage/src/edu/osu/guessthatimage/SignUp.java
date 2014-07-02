@@ -59,6 +59,9 @@ public class SignUp extends Activity implements OnClickListener {
 				|| (confirm.equals(""))) {
 			Toast.makeText(SignUp.this, "Missing entry", Toast.LENGTH_SHORT)
 					.show();
+			etUsername.setText("");
+			etPassword.setText("");
+			etConfirm.setText("");
 		} else if (!password.equals(confirm)) {
 			new AlertDialog.Builder(this)
 					.setTitle("Error")
@@ -71,6 +74,9 @@ public class SignUp extends Activity implements OnClickListener {
 							})
 
 					.show();
+			etUsername.setText("");
+			etPassword.setText("");
+			etConfirm.setText("");
 		}
 	}
 

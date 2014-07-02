@@ -65,6 +65,8 @@ public class LoginScreen extends Activity implements OnClickListener {
 										int which) {
 								}
 							}).show();
+			userNameEditableField.setText("");
+			passwordEditableField.setText("");
 		}
 		
 	}
