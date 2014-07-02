@@ -37,6 +37,16 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	private Thread timeThread = new Thread(new timeCount());
 	private Thread scoreThread = new Thread(new scoreCount());
 	
+	private databaseHelperEasyTwo dh1;
+	private databaseHelperEasyFive dh2;
+	private databaseHelperEasyTen dh3;
+	private databaseHelperMediumTwo dh4;
+	private databaseHelperMediumFive dh5;
+	private databaseHelperMediumTen dh6;
+	private databaseHelperHardTwo dh7;
+	private databaseHelperHardFive dh8;
+	private databaseHelperHardTen dh9;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -69,6 +79,8 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	    currentScore = 0;
 
 	    scoreThread.start();
+	    
+	    savePlayerScore(10);
 	}
 	
 	private Handler timeHandler = new Handler();
@@ -133,6 +145,49 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			}
 		}
 	}
+	
+	public void savePlayerScore(int score){
+        String easy = "4";
+        String medium = "2";
+        String hard = "1";
+        String two = "2";
+        String five = "5";
+        String ten = "10";
+        this.dh1 = new databaseHelperEasyTwo(this);
+        this.dh2 = new databaseHelperEasyFive(this);
+        this.dh3 = new databaseHelperEasyTen(this);
+        this.dh4 = new databaseHelperMediumTwo(this);
+        this.dh5 = new databaseHelperMediumFive(this);
+        this.dh6 = new databaseHelperMediumTen(this);
+        this.dh7 = new databaseHelperHardTwo(this);
+        this.dh8 = new databaseHelperHardFive(this);
+        this.dh9 = new databaseHelperHardTen(this);
+        String time = Settings.getTime(getApplicationContext());
+        String difficulty = Settings.getNumber(getApplicationContext());
+       
+        if(time==two && difficulty==easy){
+                        this.dh1.insert("Hello", "25");
+                }else if(time==five && difficulty==easy){
+                		this.dh2.insert("hello", "15");
+                }else if(time==ten && difficulty==easy){
+                		this.dh3.insert("hello", "15");
+                }else if(time==two && difficulty==medium){
+                		this.dh4.insert("hello", "15");
+                }else if(time==five && difficulty==medium){
+                		this.dh5.insert("hello", "15");
+                }else if(time==ten && difficulty==medium){
+                		this.dh6.insert("hello", "15");
+                }else if(time==two && difficulty==hard){
+                		this.dh7.insert("hello", "15");
+                }else if(time==five && difficulty==hard){
+                		this.dh8.insert("hello", "15");
+                }else if(time==ten && difficulty==hard){
+                		this.dh9.insert("hello", "15");
+                }else{
+                        Toast.makeText(getBaseContext(), "Fucking Error",
+                Toast.LENGTH_SHORT).show();
+                }
+        }
 
 	
 	 private static void populateDictionary() {

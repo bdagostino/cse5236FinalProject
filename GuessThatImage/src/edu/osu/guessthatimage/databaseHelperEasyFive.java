@@ -13,8 +13,8 @@ import java.util.List;
 
 public class databaseHelperEasyFive {
 	private static final String DATABASE_NAME = "GuessThatImage.db";
-	private static final int DATABASE_VERSION = 1;
-	private static final String TABLE_EASY_FIVEMIN = "Difficulty: Easy, Time: 5 min";
+	private static final int DATABASE_VERSION = 3;
+	private static final String TABLE_EASY_FIVEMIN = "Easy_5";//"Difficulty: Easy, Time: 5 min";
 	private Context context;
 	private SQLiteDatabase db;
 	private SQLiteStatement insertStmt;

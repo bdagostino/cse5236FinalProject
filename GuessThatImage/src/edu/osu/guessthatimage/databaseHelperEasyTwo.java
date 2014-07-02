@@ -13,8 +13,8 @@ import java.util.List;
 
 public class databaseHelperEasyTwo {
 	private static final String DATABASE_NAME = "GuessThatImage.db";
-	private static final int DATABASE_VERSION = 1;
-	private static final String TABLE_EASY_TWOMIN = "Difficulty: Easy, Time: 10 min";
+	private static final int DATABASE_VERSION = 2;
+	private static final String TABLE_EASY_TWOMIN = "Easy_2";//"Difficulty: Easy, Time: 10 min";
 	private Context context;
 	private SQLiteDatabase db;
 	private SQLiteStatement insertStmt;
@@ -37,6 +37,7 @@ public class databaseHelperEasyTwo {
        db.execSQL("CREATE TABLE " + TABLE_EASY_TWOMIN + "(id INTEGER PRIMARY KEY, name TEXT, score TEXT)");
        }
 
+    
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
