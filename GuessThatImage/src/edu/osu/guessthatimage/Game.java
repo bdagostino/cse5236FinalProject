@@ -188,22 +188,25 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
        
         if(time.equals(two) && difficulty.equals(easy)){
                         this.dh1.insert("Hello", "25");
+                        this.dh1.insert("asfhalsdkhflas", "15");
+                        this.dh1.insert("lghjklh", "55");
+                        this.dh1.insert("qwetqwe", "100");
                 }else if(time.equals(five) && difficulty.equals(easy)){
-                		this.dh2.insert("hello", "15");
+                		this.dh2.insert("hello", "8");
                 }else if(time.equals(ten) && difficulty.equals(easy)){
-                		this.dh3.insert("hello", "15");
+                		this.dh3.insert("hello", "7");
                 }else if(time.equals(two) && difficulty.equals(medium)){
-                		this.dh4.insert("hello", "15");
+                		this.dh4.insert("hello", "4");
                 }else if(time.equals(five) && difficulty.equals(medium)){
-                		this.dh5.insert("hello", "15");
+                		this.dh5.insert("hello", "0");
                 }else if(time.equals(ten) && difficulty.equals(medium)){
-                		this.dh6.insert("hello", "15");
+                		this.dh6.insert("hello", "2");
                 }else if(time.equals(two) && difficulty.equals(hard)){
-                		this.dh7.insert("hello", "15");
+                		this.dh7.insert("hello", "5");
                 }else if(time.equals(five) && difficulty.equals(hard)){
-                		this.dh8.insert("hello", "15");
+                		this.dh8.insert("hello", "3");
                 }else if(time.equals(ten) && difficulty.equals(hard)){
-                		this.dh9.insert("hello", "15");
+                		this.dh9.insert("hello", "1");
                 }else{
                         Toast.makeText(getBaseContext(), "Fucking Error",
                 Toast.LENGTH_SHORT).show();

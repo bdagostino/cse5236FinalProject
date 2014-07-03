@@ -55,13 +55,13 @@ public class databaseHelperHardTen {
     this.db.delete(TABLE_HARD_TENMIN, null, null);
  }
 	  
- public List<String> selectAll(String username, String score) {
+ public List<String> selectAll() {
     List<String> list = new ArrayList<String>();
-    Cursor cursor = this.db.query(TABLE_HARD_TENMIN, new String[] { "name", "score" }, "name = '"+ username +"' AND score= '"+ score+"'", null, null, null, "score desc");
+    Cursor cursor = this.db.rawQuery("select * from Hard_10 order by score desc", null);
     if (cursor.moveToFirst()) {
       do {
-      	 list.add(cursor.getString(0));
       	 list.add(cursor.getString(1));
+      	 list.add(cursor.getString(2));
        } while (cursor.moveToNext()); 
     }
     if (cursor != null && !cursor.isClosed()) {
