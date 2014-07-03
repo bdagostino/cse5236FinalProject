@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import org.json.JSONException;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -67,9 +68,10 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 		btnGuess = (Button) findViewById(R.id.button1); // guess button
 		btnGuess.setOnClickListener(this);
 		guessField = (EditText) findViewById(R.id.editText1); // guess text
+		guessField.setEnabled(false);
 		playerScore = new Score(DEFAULT_SCORE); // score for player
 	    dictionary = new ArrayList<String>(); // dictionary of words
-	    populateDictionary(); // populate the dictionary
+	    Dictionary.populateDictionary(dictionary); // populate the dictionary
 	    /*
 	     * Restore values if the device is rotated.
 	     */
@@ -85,7 +87,8 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	    scoreNum = (TextView)findViewById(R.id.current_score);
 	    
 	    time = Integer.parseInt(Settings.getTime(getApplicationContext()));
-	    
+	    Log.d("EYO", "" + Settings.getNumber(getApplicationContext()));
+	    time *= 1;
 	    currentScore = 0;
 
 	    scoreThread.start();
@@ -125,7 +128,8 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
                     // TODO Auto-generated method stub
                 	int temp = Integer.parseInt(Settings.getTime(getApplicationContext()));
                     timeNum.setText(temp + "");
-                    Toast.makeText(Game.this, "timeout!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Game.this, "Out of time!", Toast.LENGTH_LONG).show();
+                    endGame();
                 }
             });
             time = Integer.parseInt(Settings.getTime(getApplicationContext()));   
@@ -133,6 +137,12 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
             btnTime.setClickable(true);
         }
     }
+	
+	private void endGame()
+	{
+		startActivity(new Intent(this, LeaderBoard.class));
+		finish();
+	}
 	
 	class scoreCount implements Runnable{
 		@Override
@@ -198,30 +208,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
                 Toast.LENGTH_SHORT).show();
                 }
         }
-
 	
-	 private static void populateDictionary() {
-	        dictionary.add("Armored Core");
-	        dictionary.add("Planetside");
-	        dictionary.add("Team Fortress 2");
-	        dictionary.add("Katia Managan");
-	        dictionary.add("Left 4 Dead");
-	        dictionary.add("League of Legends");
-	        dictionary.add("Nami");
-	        dictionary.add("Yasuo");
-	        dictionary.add("Phone");
-	        dictionary.add("TV");
-	        dictionary.add("Car");
-	        dictionary.add("Cat");
-	        dictionary.add("VALVe");
-	        dictionary.add("Gabe Newell");
-	        dictionary.add("Phreak");
-	        dictionary.add("In Flames");
-	        dictionary.add("Skyrim");
-	        dictionary.add("Oblivion");
-	        dictionary.add("Motorstorm");
-	        dictionary.add("Metal");
-	    }
 	 public void onResume() {
 			super.onResume();
 			//playNewGame();
@@ -281,6 +268,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 				break;
 			case R.id.start_time:
 				btnTime.setClickable(false);
+				guessField.setEnabled(true);
 				timeThread.start();
 				break;
 			}
@@ -311,18 +299,17 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	    }
 	    @Override
 	    public void onStop() {
-	            super.onStop();
-	             
+	            super.onStop(); 
 	            //Check device supported Accelerometer senssor or not
 	            if (AccelerometerManager.isListening()) {
 	                 
 	                //Start Accelerometer Listening
 	                AccelerometerManager.stopListening();
 	                 
-	                Toast.makeText(getBaseContext(), "onStop Accelerometer Stoped",
-	                         Toast.LENGTH_SHORT).show();
+//	                Toast.makeText(getBaseContext(), "onStop Accelerometer Stoped",
+//	                         Toast.LENGTH_SHORT).show();
 	            }
-	            
+	           
 	    }
 	    @Override
 	    public void onDestroy() {
@@ -337,8 +324,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	             
 	            Toast.makeText(getBaseContext(), "onDestroy Accelerometer Stoped",
 	                   Toast.LENGTH_SHORT).show();
-	        }
-	             
+	        }         
 	    }
 	    /**
 		 * An asynchronous task to fetch weather data from the server.
@@ -366,8 +352,18 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 					e.printStackTrace();
 					Log.d(TAG, "Image parse error");
 				}
-				ArrayList<Bitmap> pictures = new ArrayList<Bitmap>();
-				for(int i = 0; i < 2; i ++)
+				ArrayList<Bitmap> pictures = new ArrayList<Bitmap>();	
+				int images = 0;
+				if(Integer.parseInt(Settings.getNumber(getApplicationContext())) == 4)
+				{
+					images = 2;
+				}
+				else
+				{
+					images = Integer.parseInt(Settings.getNumber(getApplicationContext()));
+				}
+						
+				for(int i = 0; i < images; i ++)
 				{
 					Log.d("BG", "View received");
 					URL URL = null;
@@ -410,10 +406,23 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 					Log.d("Post", "BMP null");
 					return;
 				}
-				ImageView view = (ImageView)findViewById(R.id.imageView1);
-				view.setImageBitmap(bmp.get(0));
-				view = (ImageView)findViewById(R.id.imageView2);
-				view.setImageBitmap(bmp.get(1));
+				ImageView[] views = new ImageView[4];
+				views[0] = (ImageView)findViewById(R.id.imageView1);
+				views[1] = (ImageView)findViewById(R.id.imageView2);
+				int images = 0;
+				if(Integer.parseInt(Settings.getNumber(getApplicationContext())) == 4)
+				{
+					images = 2;
+				}
+				else
+				{
+					images = Integer.parseInt(Settings.getNumber(getApplicationContext()));
+				}
+						
+				for(int i = 0; i < images; i ++)
+				{
+					views[i].setImageBitmap(bmp.get(i));
+				}
 //				view = (ImageView)findViewById(R.id.imageView3);
 //				view.setImageBitmap(bmp.get(2));
 //				view = (ImageView)findViewById(R.id.imageView4);

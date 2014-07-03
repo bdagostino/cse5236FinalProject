@@ -69,20 +69,4 @@
         android:layout_toRightOf="@+id/editText1"
         android:src="@drawable/ic_launcher" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/current_score"
-        android:layout_alignLeft="@+id/imageView1"
-        android:src="@drawable/ic_launcher" />
-
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/current_score"
-        android:layout_alignLeft="@+id/imageView2"
-        android:src="@drawable/ic_launcher" />
-
 </RelativeLayout>
