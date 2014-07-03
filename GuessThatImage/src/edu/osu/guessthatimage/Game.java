@@ -285,8 +285,8 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	    		// Do your stuff here
 	    		skipped();
 	        	// Called when Motion Detected
-	    		Toast.makeText(getBaseContext(), "Motion detected",
-	    				Toast.LENGTH_SHORT).show();
+//	    		Toast.makeText(getBaseContext(), "Motion detected",
+//	    				Toast.LENGTH_SHORT).show();
 	    }
 	    
 	    private void skipped()
@@ -354,17 +354,10 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 					Log.d(TAG, "Image parse error");
 				}
 				ArrayList<Bitmap> pictures = new ArrayList<Bitmap>();	
-				int images = 0;
-				if(Integer.parseInt(Settings.getNumber(getApplicationContext())) == 4)
-				{
-					images = 2;
-				}
-				else
-				{
-					images = Integer.parseInt(Settings.getNumber(getApplicationContext()));
-				}
+				int imageSetting = Integer.parseInt(Settings.getNumber(getApplicationContext()));
+				
 						
-				for(int i = 0; i < images; i ++)
+				for(int i = 0; i < imageSetting; i ++)
 				{
 					Log.d("BG", "View received");
 					URL URL = null;
@@ -376,9 +369,11 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 						e.printStackTrace();
 						Log.d("BG", "URL Failed");
 					}
-					Log.d("BG", "" + i);
+					Log.d("BG", (i+1) + "th iteration");
 					try {
+						Log.d("BG", "Inside tryblock"+i);
 						Bitmap bitmap = BitmapFactory.decodeStream(URL.openConnection().getInputStream());
+						Log.d("BG", "Post bitmap" + i);
 						if(bitmap != null)
 						{
 							Bitmap resizedbitmap = Bitmap.createScaledBitmap(bitmap, 200, 200, true);
@@ -410,17 +405,10 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 				ImageView[] views = new ImageView[4];
 				views[0] = (ImageView)findViewById(R.id.imageView1);
 				views[1] = (ImageView)findViewById(R.id.imageView2);
-				int images = 0;
-				if(Integer.parseInt(Settings.getNumber(getApplicationContext())) == 4)
-				{
-					images = 2;
-				}
-				else
-				{
-					images = Integer.parseInt(Settings.getNumber(getApplicationContext()));
-				}
-						
-				for(int i = 0; i < images; i ++)
+				views[2] = (ImageView)findViewById(R.id.imageView3);
+				views[3] = (ImageView)findViewById(R.id.imageView4);
+				int imageSetting = Integer.parseInt(Settings.getNumber(getApplicationContext()));	
+				for(int i = 0; i < imageSetting && i < bmp.size(); i ++)
 				{
 					views[i].setImageBitmap(bmp.get(i));
 				}
