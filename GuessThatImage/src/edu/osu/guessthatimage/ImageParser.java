@@ -22,6 +22,7 @@ public class ImageParser {
 		image = new Image();
 		JSONObject responseObject = mData.getJSONObject("responseData");
   		JSONArray resultArray = responseObject.getJSONArray("results");
+  		Log.d("Parse", "Array Length of Results " + resultArray.length());
   		for(int i = 0; i < 4; i ++)
   		{
   			JSONObject j = resultArray.getJSONObject(i);

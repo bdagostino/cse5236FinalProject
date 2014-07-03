@@ -367,76 +367,58 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 					Log.d(TAG, "Image parse error");
 				}
 				ArrayList<Bitmap> pictures = new ArrayList<Bitmap>();
-				for(int i = 0; i < 4; i ++)
+				for(int i = 0; i < 2; i ++)
 				{
-					Log.d("Post", "View received");
+					Log.d("BG", "View received");
 					URL URL = null;
 					try {
 						URL = new URL(image.getLinks().get(i));
-						Log.d("Post", "URL Created");
+						Log.d("BG", "URL Created" + i);
 					} catch (MalformedURLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-						Log.d("Post", "URL Failed");
+						Log.d("BG", "URL Failed");
 					}
+					Log.d("BG", "" + i);
 					try {
 						Bitmap bitmap = BitmapFactory.decodeStream(URL.openConnection().getInputStream());
 						if(bitmap != null)
 						{
-							Bitmap resizedbitmap = Bitmap.createScaledBitmap(bitmap, 100, 100, true);
+							Bitmap resizedbitmap = Bitmap.createScaledBitmap(bitmap, 200, 200, true);
 							pictures.add(resizedbitmap);
+							//pictures.add(bitmap);
+							Log.d("BG", "Bitmap Added");
 						}
 						else
 						{
 						pictures.add(bitmap);	
+						Log.d("BG", "Bitmap Added");
 						}	
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-						Log.d("Post", "Bitmap Failed");
+						Log.d("BG", "Bitmap Failed");
 					}
-				}
-				
+				}			
+				Log.d("BG", "Returning");
 				return pictures;
 			}
 
 			@Override
 			protected void onPostExecute(ArrayList<Bitmap> bmp) {
 				if (bmp == null) {
+					Log.d("Post", "BMP null");
 					return;
 				}
 				ImageView view = (ImageView)findViewById(R.id.imageView1);
 				view.setImageBitmap(bmp.get(0));
 				view = (ImageView)findViewById(R.id.imageView2);
 				view.setImageBitmap(bmp.get(1));
-				view = (ImageView)findViewById(R.id.imageView3);
-				view.setImageBitmap(bmp.get(2));
-				view = (ImageView)findViewById(R.id.imageView4);
-				view.setImageBitmap(bmp.get(3));
-				//btnGuess.setClickable(true);
-//				Log.d("Post", image.toString());
-//	    		ImageView view = (ImageView)findViewById(R.id.imageView1);
-//	    		Log.d("Post", "View received");
-//	    		URL URL = null;
-//				try {
-//					URL = new URL(image.getURL());
-//					Log.d("Post", "URL Created");
-//				} catch (MalformedURLException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//					Log.d("Post", "URL Failed");
-//				}
-//	    		Bitmap bmp = null;
-//				try {
-//					bmp = BitmapFactory.decodeStream(URL.openConnection().getInputStream());
-//					Log.d("Post", "Bitmap Created");
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//					Log.d("Post", "Bitmap Failed");
-//				}
-//				
-//	    		view.setImageBitmap(bmp);
+//				view = (ImageView)findViewById(R.id.imageView3);
+//				view.setImageBitmap(bmp.get(2));
+//				view = (ImageView)findViewById(R.id.imageView4);
+//				view.setImageBitmap(bmp.get(3));
+				Log.d("Post", "Images created");
 			}
 
 		}
