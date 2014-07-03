@@ -79,6 +79,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			String guess = savedInstanceState.getString(GUESS_KEY);
 			guessField.setText(guess);
 			playerScore.setScore(savedInstanceState.getInt(SCORE_KEY));
+			guessField.setEnabled(true);
 		}
 	    
 	    timeNum = (TextView)findViewById(R.id.time_remaining);
@@ -257,7 +258,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			savedInstanceState.putString(GUESS_KEY, guess);
 			// Save player score
 			int score = playerScore.getScore();
-			savedInstanceState.putInt(SCORE_KEY, score);
+			savedInstanceState.putInt(SCORE_KEY, score);	
 		}
 		
 		public void onClick(View v) {
