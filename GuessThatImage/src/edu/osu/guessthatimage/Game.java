@@ -9,12 +9,14 @@ import org.json.JSONException;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -93,8 +95,6 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	    currentScore = 0;
 
 	    scoreThread.start();
-	    
-	    savePlayerScore(10);
 	}
 	
 	private Handler timeHandler = new Handler();
@@ -130,6 +130,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
                 	int temp = Integer.parseInt(Settings.getTime(getApplicationContext()));
                     timeNum.setText(temp + "");
                     Toast.makeText(Game.this, "Out of time!", Toast.LENGTH_LONG).show();
+                    savePlayerScore(playerScore.getScore());
                     endGame();
                 }
             });
@@ -185,32 +186,31 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
         this.dh9 = new databaseHelperHardTen(this);
         String time = Settings.getTime(getApplicationContext());
         String difficulty = Settings.getNumber(getApplicationContext());
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        String username = settings.getString("name", "player");
        
         if(time.equals(two) && difficulty.equals(easy)){
-                        this.dh1.insert("Hello", "25");
-                        this.dh1.insert("asfhalsdkhflas", "15");
-                        this.dh1.insert("lghjklh", "55");
-                        this.dh1.insert("qwetqwe", "100");
-                }else if(time.equals(five) && difficulty.equals(easy)){
-                		this.dh2.insert("hello", "8");
-                }else if(time.equals(ten) && difficulty.equals(easy)){
-                		this.dh3.insert("hello", "7");
-                }else if(time.equals(two) && difficulty.equals(medium)){
-                		this.dh4.insert("hello", "4");
-                }else if(time.equals(five) && difficulty.equals(medium)){
-                		this.dh5.insert("hello", "0");
-                }else if(time.equals(ten) && difficulty.equals(medium)){
-                		this.dh6.insert("hello", "2");
-                }else if(time.equals(two) && difficulty.equals(hard)){
-                		this.dh7.insert("hello", "5");
-                }else if(time.equals(five) && difficulty.equals(hard)){
-                		this.dh8.insert("hello", "3");
-                }else if(time.equals(ten) && difficulty.equals(hard)){
-                		this.dh9.insert("hello", "1");
-                }else{
-                        Toast.makeText(getBaseContext(), "Fucking Error",
-                Toast.LENGTH_SHORT).show();
-                }
+                this.dh1.insert(username, score+"");
+        }else if(time.equals(five) && difficulty.equals(easy)){
+        		this.dh2.insert(username, score+"");
+        }else if(time.equals(ten) && difficulty.equals(easy)){
+        		this.dh3.insert(username, score+"");
+        }else if(time.equals(two) && difficulty.equals(medium)){
+        		this.dh4.insert(username, score+"");
+        }else if(time.equals(five) && difficulty.equals(medium)){
+        		this.dh5.insert(username, score+"");
+        }else if(time.equals(ten) && difficulty.equals(medium)){
+        		this.dh6.insert(username, score+"");
+        }else if(time.equals(two) && difficulty.equals(hard)){
+        		this.dh7.insert(username, score+"");
+        }else if(time.equals(five) && difficulty.equals(hard)){
+        		this.dh8.insert(username, score+"");
+        }else if(time.equals(ten) && difficulty.equals(hard)){
+        		this.dh9.insert(username, score+"");
+        }else{
+                Toast.makeText(getBaseContext(), "Fucking Error",
+        Toast.LENGTH_SHORT).show();
+        }
         }
 	
 	 public void onResume() {
