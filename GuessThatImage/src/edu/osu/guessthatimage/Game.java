@@ -30,8 +30,6 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	
 	private static Button btnGuess;
 	private EditText guessField;
-	private static final int SETTINGS_NUM_IMAGES_DISPLAYED = 4;
-	private static final int SETTINGS_TIMER = 4;
 	private static int CURRENT_INDEX = 0;
 	private static ArrayList<String> dictionary;
 	private static Score playerScore;
@@ -45,7 +43,6 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	private int time = 10;
 	private static TextView scoreNum;
 	private int currentScore = 0;
-	//private int tempScore = 0;
 	
 	private Thread timeThread = new Thread(new timeCount());
 	private Thread scoreThread = new Thread(new scoreCount());
@@ -91,7 +88,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	    
 	    time = Integer.parseInt(Settings.getTime(getApplicationContext()));
 	    Log.d("EYO", "" + Settings.getNumber(getApplicationContext()));
-	    time *= 1;
+	    time *= 60;
 	    currentScore = 0;
 
 	    scoreThread.start();
@@ -103,16 +100,12 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	class timeCount implements Runnable{
         @Override
         public void run() {
-            // TODO Auto-generated method stub
         	currentScore = 0;
-        	//tempScore = 0;
-        	
             while(time > 0){
                 timeHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        // TODO Auto-generated method stub
-                        timeNum.setText(time + "");
+                        timeNum.setText(TimeUtilities.prettyTime(time));
                     }
                 });
                 try {
@@ -126,7 +119,6 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
             timeHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    // TODO Auto-generated method stub
                 	int temp = Integer.parseInt(Settings.getTime(getApplicationContext()));
                     timeNum.setText(temp + "");
                     Toast.makeText(Game.this, "Out of time!", Toast.LENGTH_LONG).show();
@@ -149,9 +141,6 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	class scoreCount implements Runnable{
 		@Override
 		public void run(){
-			//currentScore = playerScore.getScore();
-			//tempScore = playerScore.getScore();
-			
 			while(true){
 				scoreHandler.post(new Runnable(){
 					public void run(){
@@ -215,12 +204,9 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	
 	 public void onResume() {
 			super.onResume();
-			//playNewGame();
 			System.out.println("Resumed");
 			 //Check device supported Accelerometer senssor or not
             if (AccelerometerManager.isSupported(this)) {
-                 
-                //Start Accelerometer Listening
                 AccelerometerManager.startListening(this);
             }
             new JSONWeatherTask().execute(dictionary.get(CURRENT_INDEX));
@@ -243,7 +229,6 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			{
 				Toast.makeText(getBaseContext(), "Incorrect",
 	    				Toast.LENGTH_SHORT).show();
-				//btnGuess.setClickable(true);
 			}
 			guessField.setText("");
 		}
@@ -268,7 +253,6 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			switch (v.getId()) {
 			case R.id.button1:
 				checkGuess();
-				//btnGuess.setClickable(false);
 				break;
 			case R.id.start_time:
 				btnTime.setClickable(false);
@@ -280,14 +264,11 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 		
 		// SHAKING STUFF
 		public void onAccelerationChanged(float x, float y, float z) {
-	        // TODO Auto-generated method stub
-	         
 	    }
 	 
 	    public void onShake(float force) {
 	    		// Do your stuff here
 	    		skipped();
-	        	// Called when Motion Detected
 //	    		Toast.makeText(getBaseContext(), "Motion detected",
 //	    				Toast.LENGTH_SHORT).show();
 	    }
@@ -306,10 +287,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	            super.onStop(); 
 	            //Check device supported Accelerometer senssor or not
 	            if (AccelerometerManager.isListening()) {
-	                 
-	                //Start Accelerometer Listening
 	                AccelerometerManager.stopListening();
-	                 
 //	                Toast.makeText(getBaseContext(), "onStop Accelerometer Stoped",
 //	                         Toast.LENGTH_SHORT).show();
 	            }
@@ -322,12 +300,9 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	         
 	        //Check device supported Accelerometer senssor or not
 	        if (AccelerometerManager.isListening()) {
-	             
-	            //Start Accelerometer Listening
 	            AccelerometerManager.stopListening();
-	             
-	            Toast.makeText(getBaseContext(), "onDestroy Accelerometer Stoped",
-	                   Toast.LENGTH_SHORT).show();
+//	            Toast.makeText(getBaseContext(), "onDestroy Accelerometer Stoped",
+//	                   Toast.LENGTH_SHORT).show();
 	        }         
 	    }
 	    /**
@@ -362,35 +337,25 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 						
 				for(int i = 0; i < imageSetting; i ++)
 				{
-					Log.d("BG", "View received");
 					URL URL = null;
 					try {
 						URL = new URL(image.getLinks().get(i));
-						Log.d("BG", "URL Created" + i);
 					} catch (MalformedURLException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 						Log.d("BG", "URL Failed");
 					}
-					Log.d("BG", (i+1) + "th iteration");
 					try {
-						Log.d("BG", "Inside tryblock"+i);
 						Bitmap bitmap = BitmapFactory.decodeStream(URL.openConnection().getInputStream());
-						Log.d("BG", "Post bitmap" + i);
 						if(bitmap != null)
 						{
-							Bitmap resizedbitmap = Bitmap.createScaledBitmap(bitmap, 200, 200, true);
+							Bitmap resizedbitmap = Bitmap.createScaledBitmap(bitmap, 120, 120, true);
 							pictures.add(resizedbitmap);
-							//pictures.add(bitmap);
-							Log.d("BG", "Bitmap Added");
 						}
 						else
 						{
 						pictures.add(bitmap);	
-						Log.d("BG", "Bitmap Added");
 						}	
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 						Log.d("BG", "Bitmap Failed");
 					}
@@ -415,11 +380,6 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 				{
 					views[i].setImageBitmap(bmp.get(i));
 				}
-//				view = (ImageView)findViewById(R.id.imageView3);
-//				view.setImageBitmap(bmp.get(2));
-//				view = (ImageView)findViewById(R.id.imageView4);
-//				view.setImageBitmap(bmp.get(3));
-				Log.d("Post", "Images created");
 			}
 
 		}
