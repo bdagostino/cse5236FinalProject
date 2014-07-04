@@ -95,6 +95,11 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	    scoreThread.start();
 	}
 	
+	
+	//////////////////////////////////////////
+	//////////////////Timer///////////////////
+	//////////////////////////////////////////
+	
 	private Handler timeHandler = new Handler();
 	private Handler scoreHandler = new Handler();
 	
@@ -146,6 +151,10 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 		startActivity(new Intent(this, LeaderBoard.class));
 		finish();
 	}
+	
+	//////////////////////////////////////////
+	//////////////////Score///////////////////
+	//////////////////////////////////////////
 	
 	class scoreCount implements Runnable{
 		@Override
@@ -214,7 +223,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	 public void onResume() {
 			super.onResume();
 			System.out.println("Resumed");
-			 //Check device supported Accelerometer senssor or not
+			 //Check device supported Accelerometer sensor or not
             if (AccelerometerManager.isSupported(this)) {
                 AccelerometerManager.startListening(this);
             }
@@ -266,20 +275,20 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			}
 		}
 		
-		// SHAKING STUFF
+		//////////////////////////////////////////
+		//////////////////Shake///////////////////
+		//////////////////////////////////////////
+		
 		public void onAccelerationChanged(float x, float y, float z) {
 	    }
 	 
 	    public void onShake(float force) {
 	    		// Do your stuff here
 	    		skipped();
-//	    		Toast.makeText(getBaseContext(), "Motion detected",
-//	    				Toast.LENGTH_SHORT).show();
 	    }
 	    
 	    private void skipped()
 	    {
-	    	//guessField.setText("SKIPPED " + CURRENT_INDEX);
 	    	dictionary.nextWord();
 	    	playerScore.skipped();
 	    	Toast.makeText(getBaseContext(), "Skipped (-1)",
@@ -289,11 +298,9 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	    @Override
 	    public void onStop() {
 	            super.onStop();
-	            //Check device supported Accelerometer senssor or not
+	            //Check device supported Accelerometer sensor or not
 	            if (AccelerometerManager.isListening()) {
 	                AccelerometerManager.stopListening();
-//	                Toast.makeText(getBaseContext(), "onStop Accelerometer Stoped",
-//	                         Toast.LENGTH_SHORT).show();
 	            }
 	           
 	    }
@@ -302,14 +309,15 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	        super.onDestroy();
             kill();
 	        Log.i("Sensor", "Service  distroy");
-	         
-	        //Check device supported Accelerometer senssor or not
+	        //Check device supported Accelerometer senssr or not
 	        if (AccelerometerManager.isListening()) {
 	            AccelerometerManager.stopListening();
-//	            Toast.makeText(getBaseContext(), "onDestroy Accelerometer Stoped",
-//	                   Toast.LENGTH_SHORT).show();
 	        }         
 	    }
+	    
+	    //////////////////////////////////////////
+	    //////////////////Images//////////////////
+	    //////////////////////////////////////////
 	    /**
 		 * An asynchronous task to fetch weather data from the server.
 		 * 
@@ -347,7 +355,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 						URL = new URL(image.getLinks().get(i));
 					} catch (MalformedURLException e) {
 						e.printStackTrace();
-						Log.d("BG", "URL Failed");
+						Log.d(TAG, "URL Failed");
 					}
 					try {
 						Bitmap bitmap = BitmapFactory.decodeStream(URL.openConnection().getInputStream());
@@ -362,10 +370,9 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 						}	
 					} catch (IOException e) {
 						e.printStackTrace();
-						Log.d("BG", "Bitmap Failed");
+						Log.d(TAG, "Bitmap Failed");
 					}
 				}			
-				Log.d("BG", "Returning");
 				return pictures;
 			}
 
@@ -388,23 +395,4 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			}
 
 		}
-
-
-public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
-    int width = bm.getWidth();
-    int height = bm.getHeight();
-    float scaleWidth = ((float) newWidth) / width;
-    float scaleHeight = ((float) newHeight) / height;
-    // CREATE A MATRIX FOR THE MANIPULATION
-    Matrix matrix = new Matrix();
-    // RESIZE THE BIT MAP
-    matrix.postScale(scaleWidth, scaleHeight);
-
-    // "RECREATE" THE NEW BITMAP
-    Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
-    return resizedBitmap;
-}
-
-
-		
 }

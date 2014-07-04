@@ -20,25 +20,25 @@ public class Dictionary
 	
 	public void populateDictionary() {
 	    dictionary = new ArrayList<String>(); // dictionary of words
-	    dictionary.add("Armored Core");
-	    dictionary.add("Planetside");
-	    dictionary.add("Team Fortress 2");
-	    dictionary.add("Katia Managan");
-	    dictionary.add("Left 4 Dead");
-	    dictionary.add("League of Legends");
-	    dictionary.add("Yasuo");
-	    dictionary.add("Phone");
+	    dictionary.add("Cat");
+	    dictionary.add("Banana");
+	    dictionary.add("Walrus");
+	    dictionary.add("Chair");
+	    dictionary.add("Light");
+	    dictionary.add("Game");
+	    dictionary.add("Radio");
+	    dictionary.add("Truck");
 	    dictionary.add("TV");
 	    dictionary.add("Car");
-	    dictionary.add("Cat");
-	    dictionary.add("VALVe");
-	    dictionary.add("Gabe Newell");
-	    dictionary.add("Phreak");
-	    dictionary.add("In Flames");
-	    dictionary.add("Skyrim");
-	    dictionary.add("Oblivion");
-	    dictionary.add("Motorstorm");
-	    dictionary.add("Metal");
+	    dictionary.add("Dinosaur");
+	    dictionary.add("School");
+	    dictionary.add("OSU");
+	    dictionary.add("Music");
+	    dictionary.add("Floor");
+	    dictionary.add("Door");
+	    dictionary.add("Keyboard");
+	    dictionary.add("Mouse");
+	    dictionary.add("Speaker");
 	}
 	
 	public String getCurrentWord()
