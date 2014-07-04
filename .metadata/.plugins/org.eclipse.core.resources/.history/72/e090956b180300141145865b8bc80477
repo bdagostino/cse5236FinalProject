@@ -122,7 +122,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
                 time--;
             }
            
-            if(runFlag == true){
+            while(runFlag == true){
                 timeHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -138,14 +138,12 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
         }
     }
        
-    public void kill()
-    {
-    	runFlag = false;
+        public void kill(){
+        runFlag = false;
     }
 	
 	private void endGame()
 	{
-		savePlayerScore(playerScore.getScore());
 		startActivity(new Intent(this, LeaderBoard.class));
 		finish();
 	}

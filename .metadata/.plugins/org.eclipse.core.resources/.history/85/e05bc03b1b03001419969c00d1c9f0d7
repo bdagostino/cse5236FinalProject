@@ -88,7 +88,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	    
 	    time = Integer.parseInt(Settings.getTime(getApplicationContext()));
 	    Log.d("EYO", "" + Settings.getNumber(getApplicationContext()));
-	    time *= 60;
+	    time *= 5;
 	    currentScore = 0;
 	    guessField.setEnabled(true);
 		timeThread.start();
