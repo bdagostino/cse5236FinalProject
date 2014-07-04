@@ -1,88 +1,124 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/GameplayContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="${packageName}.${activityClass}" >
+    android:background="@drawable/blue_background"
+    android:paddingTop="5dp" >
 
-    <EditText
-        android:id="@+id/editText1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="29dp"
-        android:ems="10" />
+    <TableLayout
+        android:id="@+id/TableLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="${packageName}.${activityClass}" >
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/editText1"
-        android:layout_alignBottom="@+id/editText1"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="14dp"
-        android:text="Guess" />
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp" >
 
-    <Button
-        android:id="@+id/start_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/button1"
-        android:layout_alignLeft="@+id/button1"
-        android:layout_alignRight="@+id/button1"
-        android:layout_marginBottom="54dp"
-        android:text="Start!" />
+            <TextView
+                android:id="@+id/time_remaining"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="time" 
+                android:textColor="@android:color/white"/>
 
-    <TextView
-        android:id="@+id/time_remaining"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/start_time"
-        android:layout_alignBottom="@+id/start_time"
-        android:layout_alignParentLeft="true"
-        android:text="Here is the time counter!" />
+            <TextView
+                android:id="@+id/current_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:gravity="right"
+                android:text="0"
+                android:textColor="@android:color/white" />
 
-    <TextView
-        android:id="@+id/current_score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/start_time"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="75dp"
-        android:text="0" />
+        </TableRow>
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="31dp"
-        android:layout_marginTop="24dp"
-        android:layout_toRightOf="@+id/current_score"
-        android:src="@drawable/ic_launcher" />
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/imageView1"
-        android:layout_toRightOf="@+id/editText1"
-        android:src="@drawable/ic_launcher" />
+            <TableRow
+                android:id="@+id/tableRow3"
+                android:layout_width="match_parent"
+                android:layout_height="2dp" >
 
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/current_score"
-        android:layout_alignLeft="@+id/imageView2"
-        android:src="@drawable/ic_launcher" />
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_weight="0.5"
+                    android:minHeight="150dp"
+                    android:scaleType="fitCenter" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/imageView1"
-        android:layout_alignTop="@+id/imageView4"
-        android:src="@drawable/ic_launcher" />
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:minHeight="150dp"
+                    android:scaleType="fitCenter" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:minHeight="150dp"
+                    android:scaleType="fitCenter" />
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:minHeight="150dp"
+                    android:scaleType="fitCenter" />
+            </TableRow>
+        </TableLayout>
+    </TableLayout>
+
+    <RelativeLayout
+        android:id="@+id/RelativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom" >
+
+        <TableLayout
+            android:id="@+id/guessTable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="6dp" >
+
+            <EditText
+                android:id="@+id/editText1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:textColor="@android:color/white" >
+
+                <requestFocus />
+            </EditText>
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/btn_default"
+                android:text="Guess" />
+
+        </TableLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

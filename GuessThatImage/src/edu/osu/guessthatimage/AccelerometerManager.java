@@ -16,7 +16,7 @@ public class AccelerometerManager {
      
     /** Accuracy configuration */
     private static float threshold  = 15.0f;
-    private static int interval     = 200;
+    private static int interval     = 100000000;
   
     private static Sensor sensor;
     private static SensorManager sensorManager;
@@ -210,8 +210,7 @@ public class AccelerometerManager {
                 }
                 else
                 {
-//                    Toast.makeText(aContext,"No Motion detected", Toast.LENGTH_SHORT).show();
-                     
+//                    Toast.makeText(aContext,"No Motion detected", Toast.LENGTH_SHORT).show();                     
                 }
             }
             // trigger change event

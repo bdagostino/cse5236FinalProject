@@ -30,15 +30,12 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	
 	private static Button btnGuess;
 	private EditText guessField;
-	private static int CURRENT_INDEX = 0;
-	private static ArrayList<String> dictionary;
 	private static Score playerScore;
 	private static int DEFAULT_SCORE = 0;
 	
 	private static String GUESS_KEY = "GUESS";
 	private static String SCORE_KEY = "SCORE";
 	
-	private static Button btnTime;
 	private static TextView timeNum;
 	private int time = 10;
 	private static TextView scoreNum;
@@ -57,6 +54,10 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	private databaseHelperHardFive dh8;
 	private databaseHelperHardTen dh9;
 	
+	private Dictionary dictionary;
+	
+	private boolean runFlag = true;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -69,8 +70,9 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 		guessField = (EditText) findViewById(R.id.editText1); // guess text
 		guessField.setEnabled(false);
 		playerScore = new Score(DEFAULT_SCORE); // score for player
-	    dictionary = new ArrayList<String>(); // dictionary of words
-	    Dictionary.populateDictionary(dictionary); // populate the dictionary
+		dictionary = new Dictionary(); //create a dictionary
+	    dictionary.populateDictionary(); // populate the dictionary
+	    dictionary.nextWord(); //get the first word
 	    /*
 	     * Restore values if the device is rotated.
 	     */
@@ -82,15 +84,14 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 		}
 	    
 	    timeNum = (TextView)findViewById(R.id.time_remaining);
-	    btnTime = (Button)findViewById(R.id.start_time);
-	    btnTime.setOnClickListener(this);
 	    scoreNum = (TextView)findViewById(R.id.current_score);
 	    
 	    time = Integer.parseInt(Settings.getTime(getApplicationContext()));
 	    Log.d("EYO", "" + Settings.getNumber(getApplicationContext()));
 	    time *= 60;
 	    currentScore = 0;
-
+	    guessField.setEnabled(true);
+		timeThread.start();
 	    scoreThread.start();
 	}
 	
@@ -98,14 +99,19 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	private Handler scoreHandler = new Handler();
 	
 	class timeCount implements Runnable{
+        
         @Override
         public void run() {
-        	currentScore = 0;
-            while(time > 0){
+            // TODO Auto-generated method stub
+                currentScore = 0;
+                //tempScore = 0;
+               
+            while(time > 0 && runFlag == true){
                 timeHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        timeNum.setText(TimeUtilities.prettyTime(time));
+                        // TODO Auto-generated method stub
+                        timeNum.setText(time + "");
                     }
                 });
                 try {
@@ -115,21 +121,25 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
                 }
                 time--;
             }
-            
-            timeHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                	int temp = Integer.parseInt(Settings.getTime(getApplicationContext()));
-                    timeNum.setText(temp + "");
-                    Toast.makeText(Game.this, "Out of time!", Toast.LENGTH_LONG).show();
-                    savePlayerScore(playerScore.getScore());
-                    endGame();
-                }
-            });
-            time = Integer.parseInt(Settings.getTime(getApplicationContext()));   
-            btnTime = (Button)findViewById(R.id.start_time);
-            btnTime.setClickable(true);
+           
+            while(runFlag == true){
+                timeHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub
+                        int temp = Integer.parseInt(Settings.getTime(getApplicationContext()));
+                        timeNum.setText(temp + "");
+                        Toast.makeText(Game.this, "Out of time!", Toast.LENGTH_LONG).show();
+                        endGame();
+                    }
+                });
+                time = Integer.parseInt(Settings.getTime(getApplicationContext()));  
+            }
         }
+    }
+       
+        public void kill(){
+        runFlag = false;
     }
 	
 	private void endGame()
@@ -145,7 +155,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 				scoreHandler.post(new Runnable(){
 					public void run(){
 						currentScore = playerScore.getScore();
-						scoreNum.setText(currentScore + "");
+						scoreNum.setText("Score: " + currentScore);
 					}
 				});
 				try {
@@ -209,21 +219,21 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
             if (AccelerometerManager.isSupported(this)) {
                 AccelerometerManager.startListening(this);
             }
-            new JSONWeatherTask().execute(dictionary.get(CURRENT_INDEX));
+            new JSONWeatherTask().execute(dictionary.getCurrentWord());
 		}
 	 
 	 private void checkGuess() {
 			String temp = guessField.getText().toString().toLowerCase();
 			System.out.println("Checkguess");
-			if(temp.equals(dictionary.get(CURRENT_INDEX).toLowerCase()))
+			if(temp.equals(dictionary.getCurrentWord().toLowerCase()))
 			{
 				System.out.println("Correct guess");
 				playerScore.correctAnswer();
 				guessField.setText("CORRECT");
-				CURRENT_INDEX ++;
+				dictionary.nextWord();
 				Toast.makeText(getBaseContext(), "Correct (+2)",
 	    				Toast.LENGTH_SHORT).show();
-				new JSONWeatherTask().execute(dictionary.get(CURRENT_INDEX));
+				new JSONWeatherTask().execute(dictionary.getCurrentWord());
 			}
 			else
 			{
@@ -254,11 +264,6 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			case R.id.button1:
 				checkGuess();
 				break;
-			case R.id.start_time:
-				btnTime.setClickable(false);
-				guessField.setEnabled(true);
-				timeThread.start();
-				break;
 			}
 		}
 		
@@ -275,16 +280,17 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	    
 	    private void skipped()
 	    {
-	    	guessField.setText("SKIPPED " + CURRENT_INDEX);
-	    	CURRENT_INDEX ++;
+	    	//guessField.setText("SKIPPED " + CURRENT_INDEX);
+	    	dictionary.nextWord();
 	    	playerScore.skipped();
 	    	Toast.makeText(getBaseContext(), "Skipped (-1)",
     				Toast.LENGTH_SHORT).show();
-	    	new JSONWeatherTask().execute(dictionary.get(CURRENT_INDEX));
+	    	new JSONWeatherTask().execute(dictionary.getCurrentWord());
 	    }
 	    @Override
 	    public void onStop() {
-	            super.onStop(); 
+	            super.onStop();
+	            kill();
 	            //Check device supported Accelerometer senssor or not
 	            if (AccelerometerManager.isListening()) {
 	                AccelerometerManager.stopListening();

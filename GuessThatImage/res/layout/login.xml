@@ -4,6 +4,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
+    <ImageView
+	    android:id="@+id/imageView1"
+	    android:layout_width="wrap_content"
+	    android:layout_height="80dp"
+	    android:src="@drawable/title" />
+    
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
