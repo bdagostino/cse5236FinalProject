@@ -19,10 +19,10 @@
     <string name="title_activity_game_session">GameSession</string>
     <string name="settings_title">System Settings</string>
     <string name="settings_summary">Set the game time and number of images be given</string>
-    <string name="time_setting_title">Time</string>
-    <string name="time_setting_summary">Set the time of game</string>
-    <string name="number_setting_title">Number of picture</string>
-    <string name="number_setting_summary">Set the number of pictures be given per word</string>
+    <string name="time_setting_title">Game Duration</string>
+    <string name="time_setting_summary">Set the amount of time per game</string>
+    <string name="number_setting_title">Number of Pictures</string>
+    <string name="number_setting_summary">Set the number of pictures be displayed</string>
     <string name="time_setting_key">time_setting</string>
     <string name="number_setting_key">number_setting</string>
     <string name="settings_key">settings</string>
@@ -41,6 +41,6 @@
     <string name="leader_board_title">Leader Board</string>
     <string name="title_activity_help">Help</string>
     
-    <string name="introduction">In this game, each time you will be given a collection of images retrieved from Google image search engine using a single word, and you need to guess which word is used. You will gain points through correct guessing. Bad guessing won’t decrease your points, but your time is limited. Your can also skip hard word, which will results in losing points. You can set the time and number of images given to you in the game setting menu.</string>
+    <string name="introduction">The goal in Guess That Image™ is to correctly identify the word used to produce an array of images returned from a Google Image Search™.  You gain two (2) points for a correct guess, zero (0) for an incorrect guess, and lose one (1) point for skipping a set of images. Images are skipped by shaking the phone.</string>
 
 </resources>

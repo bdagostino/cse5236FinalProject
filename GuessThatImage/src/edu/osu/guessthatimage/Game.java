@@ -102,7 +102,6 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
         
         @Override
         public void run() {
-            // TODO Auto-generated method stub
                 currentScore = 0;
                 //tempScore = 0;
                
@@ -110,7 +109,6 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
                 timeHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        // TODO Auto-generated method stub
                         timeNum.setText(time + "");
                     }
                 });
@@ -126,7 +124,6 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
                 timeHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        // TODO Auto-generated method stub
                         int temp = Integer.parseInt(Settings.getTime(getApplicationContext()));
                         timeNum.setText(temp + "");
                         Toast.makeText(Game.this, "Out of time!", Toast.LENGTH_LONG).show();

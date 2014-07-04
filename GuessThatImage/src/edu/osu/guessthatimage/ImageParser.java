@@ -9,7 +9,6 @@ import android.util.Log;
 
 public class ImageParser {
 
-	private static final int ERROR_CODE = 404;
 	Image image;
 	JSONObject mData;
 

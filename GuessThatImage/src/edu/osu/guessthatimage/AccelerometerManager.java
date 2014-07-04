@@ -7,7 +7,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.widget.Toast;
  
 public class AccelerometerManager {
   
@@ -64,7 +63,7 @@ public class AccelerometerManager {
                 List<Sensor> sensors = sensorManager.getSensorList(
                         Sensor.TYPE_ACCELEROMETER);
                  
-                supported = new Boolean(sensors.size() > 0);
+                supported = Boolean.valueOf(sensors.size() > 0);
                  
                  
                  

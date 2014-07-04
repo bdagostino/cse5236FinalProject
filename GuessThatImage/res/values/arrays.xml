@@ -7,7 +7,7 @@
     </string-array>
     <string-array name="number_of_pictures">
         <item >Easy - 4 Pictures</item>
-        <item >Mediun - 2 Pictures</item>
+        <item >Medium - 2 Pictures</item>
         <item >Hard - 1 Picture</item>
     </string-array>
     <string-array name="number_of_picture_value">
