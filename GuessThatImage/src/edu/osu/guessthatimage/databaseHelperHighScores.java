@@ -10,21 +10,22 @@ import android.database.sqlite.SQLiteStatement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class databaseHelperEasyFive {
-	private static final String DATABASE_NAME = "GuessThatImage1.db";
+public class databaseHelperHighScores {
+	private static final String DATABASE_NAME = "GuessThatImage.db";
 	private static final int DATABASE_VERSION = 1;
-	private static final String TABLE_EASY_FIVEMIN = "Easy_5";//"Difficulty: Easy, Time: 5 min";
+	private static final String TABLE_HIGHSCORES = "HighScore";//"Difficulty: Easy, Time: 5 min";
 	private Context context;
 	private SQLiteDatabase db;
 	private SQLiteStatement insertStmt;
-	private static final String INSERT_EASY_FIVEMIN = "insert into " + TABLE_EASY_FIVEMIN + "(name, score) values (?, ?)";
+	private static final String INSERT_HIGHSCORE = "insert into " + TABLE_HIGHSCORES + "(name, score, pictures, time) values (?, ?, ?, ?)";
+	private static final String TABLE_HIGHSCORES_NAME=null,TABLE_HIGHSCORES_SCORE=null,TABLE_HIGHSCORES_PICTURES=null,TABLE_HIGHSCORES_TIME=null;
 
 	
-	public databaseHelperEasyFive(Context context) {
+	public databaseHelperHighScores(Context context) {
 	      this.context = context;
 	      GuessThatImageOpenHelperEasyFive openHelper = new GuessThatImageOpenHelperEasyFive(this.context);
 	      this.db = openHelper.getWritableDatabase();
-	      this.insertStmt = this.db.compileStatement(INSERT_EASY_FIVEMIN);
+	      this.insertStmt = this.db.compileStatement(INSERT_HIGHSCORE);
 	   }
  
  private static class GuessThatImageOpenHelperEasyFive extends SQLiteOpenHelper {
@@ -34,7 +35,7 @@ public class databaseHelperEasyFive {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-       db.execSQL("CREATE TABLE " + TABLE_EASY_FIVEMIN + "(id INTEGER PRIMARY KEY, name TEXT, score TEXT)");
+       db.execSQL("CREATE TABLE " + TABLE_HIGHSCORES + "(id INTEGER PRIMARY KEY, name TEXT, score TEXT, pictures TEXT, time TEXT)");
        }
 
     @Override
@@ -46,18 +47,20 @@ public class databaseHelperEasyFive {
     }
  }
  
- public long insert(String name, String score) {
+ public long insert(String name, String score, String pictures, String time) {
     this.insertStmt.bindString(1, name);
     this.insertStmt.bindString(2, score);
+    this.insertStmt.bindString(3, pictures);
+    this.insertStmt.bindString(4, time);
     return this.insertStmt.executeInsert();
  }
  public void deleteAll() {
-    this.db.delete(TABLE_EASY_FIVEMIN, null, null);
+    this.db.delete(INSERT_HIGHSCORE, null, null);
  }
 	  
- public List<String> selectAll() {
-    List<String> list = new ArrayList<String>();
-    Cursor cursor = this.db.rawQuery("select * from Easy_5 order by score desc", null);
+ public List<String> selectAll(String numberPics, String time) {
+	List<String> list = new ArrayList<String>();
+	Cursor cursor = this.db.rawQuery("SELECT * FROM HighScore WHERE pictures="+numberPics+" AND time="+time,null);
     if (cursor.moveToFirst()) {
       do {
       	 list.add(cursor.getString(1));

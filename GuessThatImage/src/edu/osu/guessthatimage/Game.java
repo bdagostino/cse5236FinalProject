@@ -44,16 +44,8 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	private Thread timeThread = new Thread(new timeCount());
 	private Thread scoreThread = new Thread(new scoreCount());
 	
-	private databaseHelperEasyTwo dh1;
-	private databaseHelperEasyFive dh2;
-	private databaseHelperEasyTen dh3;
-	private databaseHelperMediumTwo dh4;
-	private databaseHelperMediumFive dh5;
-	private databaseHelperMediumTen dh6;
-	private databaseHelperHardTwo dh7;
-	private databaseHelperHardFive dh8;
-	private databaseHelperHardTen dh9;
-	
+	private databaseHelperHighScores dhScore;
+
 	private Dictionary dictionary;
 	
 	private boolean runFlag = true;
@@ -176,48 +168,14 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	}
 	
 	public void savePlayerScore(int score){
-        String easy = "4";
-        String medium = "2";
-        String hard = "1";
-        String two = "2";
-        String five = "5";
-        String ten = "10";
-        this.dh1 = new databaseHelperEasyTwo(this);
-        this.dh2 = new databaseHelperEasyFive(this);
-        this.dh3 = new databaseHelperEasyTen(this);
-        this.dh4 = new databaseHelperMediumTwo(this);
-        this.dh5 = new databaseHelperMediumFive(this);
-        this.dh6 = new databaseHelperMediumTen(this);
-        this.dh7 = new databaseHelperHardTwo(this);
-        this.dh8 = new databaseHelperHardFive(this);
-        this.dh9 = new databaseHelperHardTen(this);
+        this.dhScore = new databaseHelperHighScores(this);
         String time = Settings.getTime(getApplicationContext());
         String difficulty = Settings.getNumber(getApplicationContext());
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         String username = settings.getString("name", "player");
        
-        if(time.equals(two) && difficulty.equals(easy)){
-                this.dh1.insert(username, score+"");
-        }else if(time.equals(five) && difficulty.equals(easy)){
-        		this.dh2.insert(username, score+"");
-        }else if(time.equals(ten) && difficulty.equals(easy)){
-        		this.dh3.insert(username, score+"");
-        }else if(time.equals(two) && difficulty.equals(medium)){
-        		this.dh4.insert(username, score+"");
-        }else if(time.equals(five) && difficulty.equals(medium)){
-        		this.dh5.insert(username, score+"");
-        }else if(time.equals(ten) && difficulty.equals(medium)){
-        		this.dh6.insert(username, score+"");
-        }else if(time.equals(two) && difficulty.equals(hard)){
-        		this.dh7.insert(username, score+"");
-        }else if(time.equals(five) && difficulty.equals(hard)){
-        		this.dh8.insert(username, score+"");
-        }else if(time.equals(ten) && difficulty.equals(hard)){
-        		this.dh9.insert(username, score+"");
-        }else{
-                Toast.makeText(getBaseContext(), "Fucking Error",
-        Toast.LENGTH_SHORT).show();
-        }
+        this.dhScore.insert(username, score+"", difficulty,time);
+        
         }
 	
 	 public void onResume() {
