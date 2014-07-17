@@ -1,5 +1,7 @@
 package edu.osu.guessthatimage;
 
+import de.keyboardsurfer.android.widget.crouton.*;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.view.View.OnClickListener;
 
 public class OptionMenu extends Activity implements OnClickListener{
 
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -22,7 +25,8 @@ public class OptionMenu extends Activity implements OnClickListener{
 		View btnImage = findViewById(R.id.buttonLeaderBoard);
 		btnImage.setOnClickListener(this);
 		View btnExit = findViewById(R.id.buttonExit);
-		btnExit.setOnClickListener(this);
+		btnExit.setOnClickListener(this);		
+		Crouton.showText(this, "This is a Fucking Crouton", Style.ALERT);
 	}
 	
 	public void onClick(View v) {
