@@ -7,6 +7,9 @@ import java.util.ArrayList;
 
 import org.json.JSONException;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -99,7 +102,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
         
         @Override
         public void run() {
-                currentScore = 0;
+                currentScore = playerScore.getScore();
                 //tempScore = 0;
                
             while(time > 0 && runFlag == true){
@@ -159,7 +162,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 					}
 				});
 				try {
-                    Thread.sleep(10);
+                    Thread.sleep(10000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -197,14 +200,12 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 				playerScore.correctAnswer();
 				guessField.setText("CORRECT");
 				dictionary.nextWord();
-				Toast.makeText(getBaseContext(), "Correct (+2)",
-	    				Toast.LENGTH_SHORT).show();
+				Crouton.showText(this, "Correct (+2)", Style.INFO);
 				new JSONWeatherTask().execute(dictionary.getCurrentWord());
 			}
 			else
 			{
-				Toast.makeText(getBaseContext(), "Incorrect",
-	    				Toast.LENGTH_SHORT).show();
+				Crouton.showText(this, "Incorrect", Style.ALERT);
 			}
 			guessField.setText("");
 		}
@@ -249,8 +250,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	    {
 	    	dictionary.nextWord();
 	    	playerScore.skipped();
-	    	Toast.makeText(getBaseContext(), "Skipped (-1)",
-    				Toast.LENGTH_SHORT).show();
+	    	Crouton.showText(this, "Skipped (-1)", Style.CONFIRM);
 	    	new JSONWeatherTask().execute(dictionary.getCurrentWord());
 	    }
 	    @Override
@@ -259,8 +259,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	            //Check device supported Accelerometer sensor or not
 	            if (AccelerometerManager.isListening()) {
 	                AccelerometerManager.stopListening();
-	            }
-	           
+	            }         
 	    }
 	    @Override
 	    public void onDestroy() {

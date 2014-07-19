@@ -26,7 +26,6 @@ public class OptionMenu extends Activity implements OnClickListener{
 		btnImage.setOnClickListener(this);
 		View btnExit = findViewById(R.id.buttonExit);
 		btnExit.setOnClickListener(this);		
-		Crouton.showText(this, "This is a Fucking Crouton", Style.ALERT);
 	}
 	
 	public void onClick(View v) {
