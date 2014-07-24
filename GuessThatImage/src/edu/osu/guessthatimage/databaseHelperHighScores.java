@@ -35,7 +35,7 @@ public class databaseHelperHighScores {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-       db.execSQL("CREATE TABLE " + TABLE_HIGHSCORES + "(id INTEGER PRIMARY KEY, name TEXT, score TEXT, pictures TEXT, time TEXT)");
+       db.execSQL("CREATE TABLE " + TABLE_HIGHSCORES + "(id INTEGER PRIMARY KEY, name TEXT, score INTEGER, pictures TEXT, time TEXT)");
        }
 
     @Override
@@ -49,7 +49,7 @@ public class databaseHelperHighScores {
  
  public long insert(String name, String score, String pictures, String time) {
     this.insertStmt.bindString(1, name);
-    this.insertStmt.bindString(2, score);
+    this.insertStmt.bindLong(2, Integer.parseInt(score));
     this.insertStmt.bindString(3, pictures);
     this.insertStmt.bindString(4, time);
     return this.insertStmt.executeInsert();
@@ -60,7 +60,7 @@ public class databaseHelperHighScores {
 	  
  public List<String> selectAll(String numberPics, String time) {
 	List<String> list = new ArrayList<String>();
-	Cursor cursor = this.db.rawQuery("SELECT * FROM HighScore WHERE pictures="+numberPics+" AND time="+time,null);
+	Cursor cursor = this.db.rawQuery("SELECT * FROM HighScore WHERE pictures="+numberPics+" AND time="+time+" ORDER BY score DESC LIMIT 20",null);
     if (cursor.moveToFirst()) {
       do {
       	 list.add(cursor.getString(1));
