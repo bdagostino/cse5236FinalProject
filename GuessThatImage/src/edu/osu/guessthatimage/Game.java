@@ -80,6 +80,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			guessField.setEnabled(true);
 			
 			int numBitMapsLoaded = savedInstanceState.getInt(NUMBM_KEY);
+			bitMapArray = new Bitmap[numBitMapsLoaded];
 			ImageView[] views = new ImageView[4];
 			views[0] = (ImageView)findViewById(R.id.imageView1);
 			views[1] = (ImageView)findViewById(R.id.imageView2);
@@ -89,6 +90,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			{
 				Bitmap bm = savedInstanceState.getParcelable(NUMBM_KEY+i+"");
 				views[i].setImageBitmap(bm);
+				bitMapArray[i] = bm;
 			}			
 			dictionary.setIndex(savedInstanceState.getInt("INDEX"));
 		}
