@@ -38,6 +38,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	
 	private static String GUESS_KEY = "GUESS";
 	private static String SCORE_KEY = "SCORE";
+	private static String NUMBM_KEY = "BITMAPS";
 	
 	private static TextView timeNum;
 	private int time = 10;
@@ -50,6 +51,8 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	private databaseHelperHighScores dhScore;
 
 	private Dictionary dictionary;
+	
+	private Bitmap[] bitMapArray;
 	
 	private boolean runFlag = true;
 	
@@ -76,6 +79,18 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			guessField.setText(guess);
 			playerScore.setScore(savedInstanceState.getInt(SCORE_KEY));
 			guessField.setEnabled(true);
+			
+			int numBitMapsLoaded = savedInstanceState.getInt(NUMBM_KEY);
+			ImageView[] views = new ImageView[4];
+			views[0] = (ImageView)findViewById(R.id.imageView1);
+			views[1] = (ImageView)findViewById(R.id.imageView2);
+			views[2] = (ImageView)findViewById(R.id.imageView3);
+			views[3] = (ImageView)findViewById(R.id.imageView4);
+			for(int i = 0; i < numBitMapsLoaded; i ++)
+			{
+				Bitmap bm = savedInstanceState.getParcelable(NUMBM_KEY+i+"");
+				views[i].setImageBitmap(bm);
+			}			
 		}
 	    
 	    timeNum = (TextView)findViewById(R.id.time_remaining);
@@ -224,6 +239,12 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			// Save player score
 			int score = playerScore.getScore();
 			savedInstanceState.putInt(SCORE_KEY, score);	
+			int numBitMapsLoaded = bitMapArray.length;
+			savedInstanceState.putInt(NUMBM_KEY, numBitMapsLoaded);
+			for(int i = 0; i < numBitMapsLoaded; i ++)
+			{
+				savedInstanceState.putParcelable(NUMBM_KEY+i+"", bitMapArray[i]);
+			}
 		}
 		
 		public void onClick(View v) {
@@ -339,6 +360,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 					Log.d("Post", "BMP null");
 					return;
 				}
+				bitMapArray = new Bitmap[bmp.size()];
 				ImageView[] views = new ImageView[4];
 				views[0] = (ImageView)findViewById(R.id.imageView1);
 				views[1] = (ImageView)findViewById(R.id.imageView2);
@@ -347,6 +369,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 				int imageSetting = Integer.parseInt(Settings.getNumber(getApplicationContext()));	
 				for(int i = 0; i < imageSetting && i < bmp.size(); i ++)
 				{
+					bitMapArray[i] = bmp.get(i);
 					views[i].setImageBitmap(bmp.get(i));
 				}
 			}
