@@ -70,7 +70,6 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 		playerScore = new Score(DEFAULT_SCORE); // score for player
 		dictionary = new Dictionary(); //create a dictionary
 	    dictionary.populateDictionary(); // populate the dictionary
-	    dictionary.nextWord(); //get the first word
 	    /*
 	     * Restore values if the device is rotated.
 	     */
@@ -91,7 +90,13 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 				Bitmap bm = savedInstanceState.getParcelable(NUMBM_KEY+i+"");
 				views[i].setImageBitmap(bm);
 			}			
+			dictionary.setIndex(savedInstanceState.getInt("INDEX"));
 		}
+	    else
+	    {
+	    	dictionary.nextWord(); //get the first word
+	    	new JSONWeatherTask().execute(dictionary.getCurrentWord());
+	    }
 	    
 	    timeNum = (TextView)findViewById(R.id.time_remaining);
 	    scoreNum = (TextView)findViewById(R.id.current_score);
@@ -202,8 +207,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			 //Check device supported Accelerometer sensor or not
             if (AccelerometerManager.isSupported(this)) {
                 AccelerometerManager.startListening(this);
-            }
-            new JSONWeatherTask().execute(dictionary.getCurrentWord());
+            }   
 		}
 	 
 	 private void checkGuess() {
@@ -245,6 +249,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			{
 				savedInstanceState.putParcelable(NUMBM_KEY+i+"", bitMapArray[i]);
 			}
+			savedInstanceState.putInt("INDEX", dictionary.getIndex());
 		}
 		
 		public void onClick(View v) {
