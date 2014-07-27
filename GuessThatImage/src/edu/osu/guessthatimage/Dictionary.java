@@ -46,6 +46,14 @@ public class Dictionary
 		return dictionary.get(index);
 	}
 	
+	public int getIndex()
+	{
+		return index;
+	}
+	public void setIndex(int i)
+	{
+		index = i;
+	}
 	public void nextWord()
 	{
 		//if this isn't the first time we are picking a word remove the previous word from the dictionary
