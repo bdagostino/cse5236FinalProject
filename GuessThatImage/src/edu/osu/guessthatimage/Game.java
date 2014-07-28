@@ -38,12 +38,15 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	
 	private static String GUESS_KEY = "GUESS";
 	private static String SCORE_KEY = "SCORE";
+	private static String TIME_KEY = "TIME";
 	private static String NUMBM_KEY = "BITMAPS";
+	private static String TIME_COUNTER = "TIMECOUNTER";
 	
 	private static TextView timeNum;
-	private int time = 10;
+	private int currentTime = 10;
 	private static TextView scoreNum;
 	private int currentScore = 0;
+	private static TextView loadingTip;
 	
 	private Thread timeThread = new Thread(new timeCount());
 	private Thread scoreThread = new Thread(new scoreCount());
@@ -55,6 +58,8 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	private Bitmap[] bitMapArray;
 	
 	private boolean runFlag = true;
+	private boolean pauseFlag = true;
+	private int timeCounter = 10;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +75,8 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 		playerScore = new Score(DEFAULT_SCORE); // score for player
 		dictionary = new Dictionary(); //create a dictionary
 	    dictionary.populateDictionary(); // populate the dictionary
+	    
+	    loadingTip = (TextView)findViewById(R.id.loading_tip);
 	    /*
 	     * Restore values if the device is rotated.
 	     */
@@ -78,6 +85,8 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			guessField.setText(guess);
 			playerScore.setScore(savedInstanceState.getInt(SCORE_KEY));
 			guessField.setEnabled(true);
+			currentTime = savedInstanceState.getInt(TIME_KEY);
+			timeCounter = savedInstanceState.getInt(TIME_COUNTER);
 			
 			int numBitMapsLoaded = savedInstanceState.getInt(NUMBM_KEY);
 			bitMapArray = new Bitmap[numBitMapsLoaded];
@@ -97,15 +106,17 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	    else
 	    {
 	    	dictionary.nextWord(); //get the first word
+	    	//Crouton.showText(this, "Loading...", Style.INFO);
 	    	new JSONWeatherTask().execute(dictionary.getCurrentWord());
+	    	//Crouton.showText(this, "Now Guess!", Style.INFO);
+	    	currentTime = Integer.parseInt(Settings.getTime(getApplicationContext()));
+	    	currentTime *= 60;
 	    }
 	    
 	    timeNum = (TextView)findViewById(R.id.time_remaining);
 	    scoreNum = (TextView)findViewById(R.id.current_score);
 	    
-	    time = Integer.parseInt(Settings.getTime(getApplicationContext()));
 	    Log.d("EYO", "" + Settings.getNumber(getApplicationContext()));
-	    time *= 60;
 	    currentScore = 0;
 	    guessField.setEnabled(true);
 		timeThread.start();
@@ -127,19 +138,32 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
                 currentScore = playerScore.getScore();
                 //tempScore = 0;
                
-            while(time > 0 && runFlag == true){
+            while(currentTime > 0 && runFlag == true){
                 timeHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        timeNum.setText(time + "");
+                    	timeNum.setText(currentTime + "");
+                    	if(pauseFlag == false){
+                        	loadingTip.setText("Now Guess!");
+                    	}
+                    	else{
+                    		loadingTip.setText("Loading");
+                    	}
                     }
                 });
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                time--;
+                
+                if(pauseFlag == false){
+                	timeCounter --;
+                	if(timeCounter == 0){
+                		timeCounter = 10;
+                		currentTime--;
+                	}
+                }
             }
            
             if(runFlag == true){
@@ -152,7 +176,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
                         endGame();
                     }
                 });
-                time = Integer.parseInt(Settings.getTime(getApplicationContext()));  
+                //currentTime = Integer.parseInt(Settings.getTime(getApplicationContext()));  
             }
         }
     }
@@ -160,6 +184,14 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
     public void kill()
     {
     	runFlag = false;
+    }
+    
+    public void pauseTime(){
+    	pauseFlag = true;
+    }
+    
+    public void startTime(){
+    	pauseFlag = false;
     }
 	
 	private void endGame()
@@ -184,7 +216,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 					}
 				});
 				try {
-                    Thread.sleep(10000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -222,7 +254,9 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 				guessField.setText("CORRECT");
 				dictionary.nextWord();
 				Crouton.showText(this, "Correct (+2)", Style.INFO);
+				//Crouton.showText(this, "Loading...", Style.INFO);
 				new JSONWeatherTask().execute(dictionary.getCurrentWord());
+				//Crouton.showText(this, "Now Guess!", Style.INFO);
 			}
 			else
 			{
@@ -244,7 +278,11 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			savedInstanceState.putString(GUESS_KEY, guess);
 			// Save player score
 			int score = playerScore.getScore();
-			savedInstanceState.putInt(SCORE_KEY, score);	
+			savedInstanceState.putInt(SCORE_KEY, score);
+			// Save remaining time
+			int time = currentTime;
+			savedInstanceState.putInt(TIME_KEY, time);
+			savedInstanceState.putInt(TIME_COUNTER, timeCounter);
 			int numBitMapsLoaded = bitMapArray.length;
 			savedInstanceState.putInt(NUMBM_KEY, numBitMapsLoaded);
 			for(int i = 0; i < numBitMapsLoaded; i ++)
@@ -279,7 +317,9 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	    	dictionary.nextWord();
 	    	playerScore.skipped();
 	    	Crouton.showText(this, "Skipped (-1)", Style.CONFIRM);
+	    	//Crouton.showText(this, "Loading...", Style.INFO);
 	    	new JSONWeatherTask().execute(dictionary.getCurrentWord());
+	    	//Crouton.showText(this, "Now Guess!", Style.INFO);
 	    }
 	    @Override
 	    public void onStop() {
@@ -315,6 +355,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 
 			@Override
 			protected ArrayList<Bitmap> doInBackground(String... params) {
+				pauseTime();
 				String data = null;
 				try {
 					data = ((new GoogleImageHTTPClient()).getImageData(params[0]));
@@ -379,6 +420,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 					bitMapArray[i] = bmp.get(i);
 					views[i].setImageBitmap(bmp.get(i));
 				}
+				startTime();
 			}
 
 		}
