@@ -42,6 +42,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	private static String NUMBM_KEY = "BITMAPS";
 	private static String TIME_COUNTER = "TIMECOUNTER";
 	private static String TIME_FLAG = "TIMEFLAG";
+	private static String RELOAD_FLAG = "RELOADFLAG";
 	
 	private static TextView timeNum;
 	private int currentTime = 10;
@@ -61,6 +62,8 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	private boolean runFlag = true;
 	private boolean pauseFlag = true;
 	private int timeCounter = 10;
+	
+	private boolean reloadFlag = true;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,21 +92,28 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			currentTime = savedInstanceState.getInt(TIME_KEY);
 			timeCounter = savedInstanceState.getInt(TIME_COUNTER);
 			pauseFlag = savedInstanceState.getBoolean(TIME_FLAG);
-			
-			int numBitMapsLoaded = savedInstanceState.getInt(NUMBM_KEY);
-			bitMapArray = new Bitmap[numBitMapsLoaded];
-			ImageView[] views = new ImageView[4];
-			views[0] = (ImageView)findViewById(R.id.imageView1);
-			views[1] = (ImageView)findViewById(R.id.imageView2);
-			views[2] = (ImageView)findViewById(R.id.imageView3);
-			views[3] = (ImageView)findViewById(R.id.imageView4);
-			for(int i = 0; i < numBitMapsLoaded; i ++)
-			{
-				Bitmap bm = savedInstanceState.getParcelable(NUMBM_KEY+i+"");
-				views[i].setImageBitmap(bm);
-				bitMapArray[i] = bm;
-			}			
 			dictionary.setIndex(savedInstanceState.getInt("INDEX"));
+			
+			reloadFlag = savedInstanceState.getBoolean(RELOAD_FLAG);
+			if(reloadFlag == false){
+				int numBitMapsLoaded = savedInstanceState.getInt(NUMBM_KEY);
+				bitMapArray = new Bitmap[numBitMapsLoaded];
+				ImageView[] views = new ImageView[4];
+				views[0] = (ImageView)findViewById(R.id.imageView1);
+				views[1] = (ImageView)findViewById(R.id.imageView2);
+				views[2] = (ImageView)findViewById(R.id.imageView3);
+				views[3] = (ImageView)findViewById(R.id.imageView4);
+				for(int i = 0; i < numBitMapsLoaded; i ++)
+				{
+					Bitmap bm = savedInstanceState.getParcelable(NUMBM_KEY+i+"");
+					views[i].setImageBitmap(bm);
+					bitMapArray[i] = bm;
+				}
+			}
+			else
+			{
+				new JSONWeatherTask().execute(dictionary.getCurrentWord());
+			}
 		}
 	    else
 	    {
@@ -194,6 +204,14 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
     
     public void startTime(){
     	pauseFlag = false;
+    }
+    
+    public void enReload(){
+    	reloadFlag = true;
+    }
+    
+    public void unReload(){
+    	reloadFlag = false;
     }
 	
 	private void endGame()
@@ -286,11 +304,15 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			savedInstanceState.putInt(TIME_KEY, time);
 			savedInstanceState.putInt(TIME_COUNTER, timeCounter);
 			savedInstanceState.putBoolean(TIME_FLAG, pauseFlag);
-			int numBitMapsLoaded = bitMapArray.length;
-			savedInstanceState.putInt(NUMBM_KEY, numBitMapsLoaded);
-			for(int i = 0; i < numBitMapsLoaded; i ++)
-			{
-				savedInstanceState.putParcelable(NUMBM_KEY+i+"", bitMapArray[i]);
+			// buffer the images for rotation
+			savedInstanceState.putBoolean(RELOAD_FLAG, reloadFlag);
+			if(reloadFlag == false){
+				int numBitMapsLoaded = bitMapArray.length;
+				savedInstanceState.putInt(NUMBM_KEY, numBitMapsLoaded);
+				for(int i = 0; i < numBitMapsLoaded; i ++)
+				{
+					savedInstanceState.putParcelable(NUMBM_KEY+i+"", bitMapArray[i]);
+				}
 			}
 			savedInstanceState.putInt("INDEX", dictionary.getIndex());
 		}
@@ -358,6 +380,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 
 			@Override
 			protected ArrayList<Bitmap> doInBackground(String... params) {
+				enReload();
 				pauseTime();
 				String data = null;
 				try {
@@ -395,13 +418,14 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 						}
 						else
 						{
-						pictures.add(bitmap);	
+							pictures.add(bitmap);	
 						}	
 					} catch (IOException e) {
 						e.printStackTrace();
 						Log.d(TAG, "Bitmap Failed");
 					}
-				}			
+				}	
+				unReload();
 				return pictures;
 			}
 
