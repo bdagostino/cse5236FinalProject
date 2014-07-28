@@ -41,6 +41,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	private static String TIME_KEY = "TIME";
 	private static String NUMBM_KEY = "BITMAPS";
 	private static String TIME_COUNTER = "TIMECOUNTER";
+	private static String TIME_FLAG = "TIMEFLAG";
 	
 	private static TextView timeNum;
 	private int currentTime = 10;
@@ -87,6 +88,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			guessField.setEnabled(true);
 			currentTime = savedInstanceState.getInt(TIME_KEY);
 			timeCounter = savedInstanceState.getInt(TIME_COUNTER);
+			pauseFlag = savedInstanceState.getBoolean(TIME_FLAG);
 			
 			int numBitMapsLoaded = savedInstanceState.getInt(NUMBM_KEY);
 			bitMapArray = new Bitmap[numBitMapsLoaded];
@@ -283,6 +285,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			int time = currentTime;
 			savedInstanceState.putInt(TIME_KEY, time);
 			savedInstanceState.putInt(TIME_COUNTER, timeCounter);
+			savedInstanceState.putBoolean(TIME_FLAG, pauseFlag);
 			int numBitMapsLoaded = bitMapArray.length;
 			savedInstanceState.putInt(NUMBM_KEY, numBitMapsLoaded);
 			for(int i = 0; i < numBitMapsLoaded; i ++)
