@@ -11,21 +11,30 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBar.LayoutParams;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +49,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	private static String SCORE_KEY = "SCORE";
 	private static String TIME_KEY = "TIME";
 	private static String NUMBM_KEY = "BITMAPS";
+	private static String ORIGINAL_KEY = "ORIGINAL";
 	private static String TIME_COUNTER = "TIMECOUNTER";
 	private static String TIME_FLAG = "TIMEFLAG";
 	private static String RELOAD_FLAG = "RELOADFLAG";
@@ -58,12 +68,20 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	private Dictionary dictionary;
 	
 	private Bitmap[] bitMapArray;
+	private Bitmap[] originalImages;
 	
 	private boolean runFlag = true;
 	private boolean pauseFlag = true;
 	private int timeCounter = 10;
 	
 	private boolean reloadFlag = true;
+	
+	private ImageView[] views = new ImageView[4];
+	private LayoutInflater layoutInflater;
+	//private final PopupWindow mPopupWindow;
+	private View popupView;
+	
+	private Display display;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +99,17 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	    dictionary.populateDictionary(); // populate the dictionary
 	    
 	    loadingTip = (TextView)findViewById(R.id.loading_tip);
+	    
+	    views[0] = (ImageView)findViewById(R.id.imageView1);
+		views[1] = (ImageView)findViewById(R.id.imageView2);
+		views[2] = (ImageView)findViewById(R.id.imageView3);
+		views[3] = (ImageView)findViewById(R.id.imageView4);
+		for(int i = 0;i < 4;i ++){
+			views[i].setOnClickListener(this);
+		}
+	    
+		
+		
 	    /*
 	     * Restore values if the device is rotated.
 	     */
@@ -98,16 +127,21 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			if(reloadFlag == false){
 				int numBitMapsLoaded = savedInstanceState.getInt(NUMBM_KEY);
 				bitMapArray = new Bitmap[numBitMapsLoaded];
+				originalImages  = new Bitmap[numBitMapsLoaded];
+				/*
 				ImageView[] views = new ImageView[4];
 				views[0] = (ImageView)findViewById(R.id.imageView1);
 				views[1] = (ImageView)findViewById(R.id.imageView2);
 				views[2] = (ImageView)findViewById(R.id.imageView3);
 				views[3] = (ImageView)findViewById(R.id.imageView4);
+				*/
 				for(int i = 0; i < numBitMapsLoaded; i ++)
 				{
 					Bitmap bm = savedInstanceState.getParcelable(NUMBM_KEY+i+"");
 					views[i].setImageBitmap(bm);
 					bitMapArray[i] = bm;
+					bm = savedInstanceState.getParcelable(ORIGINAL_KEY+i+"");
+					originalImages[i] = bm;
 				}
 			}
 			else
@@ -320,6 +354,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 				for(int i = 0; i < numBitMapsLoaded; i ++)
 				{
 					savedInstanceState.putParcelable(NUMBM_KEY+i+"", bitMapArray[i]);
+					savedInstanceState.putParcelable(ORIGINAL_KEY+i+"", originalImages[i]);
 				}
 			}
 			savedInstanceState.putInt("INDEX", dictionary.getIndex());
@@ -329,6 +364,102 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			switch (v.getId()) {
 			case R.id.button1:
 				checkGuess();
+				break;
+			case R.id.imageView1:
+				LayoutInflater layoutInflater = (LayoutInflater)getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);  
+			    popupView = layoutInflater.inflate(R.layout.popup, null);  
+			    final PopupWindow mPopupWindow1 = new PopupWindow(popupView,LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT); 
+			    mPopupWindow1.setTouchable(true);
+		        mPopupWindow1.setOutsideTouchable(true);
+		        mPopupWindow1.setFocusable(true);;
+			    ImageView popImg1 = (ImageView)popupView.findViewById(R.id.popupImageView);
+			    //mPopupWindow1.showAsDropDown(views[0]);
+			    mPopupWindow1.showAtLocation(views[0], Gravity.CENTER, 0, 0);
+			    popupView.setOnTouchListener(new View.OnTouchListener() {
+					
+					@Override
+					public boolean onTouch(View v, MotionEvent event) {
+						// TODO Auto-generated method stub
+						switch (event.getAction() & MotionEvent.ACTION_MASK) {
+						case MotionEvent.ACTION_DOWN:
+							mPopupWindow1.dismiss();
+						}
+						return false;
+					}
+				});
+			    popImg1.setImageBitmap(originalImages[0]);
+				break;
+			case R.id.imageView2:
+				layoutInflater = (LayoutInflater)getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);  
+			    View popupView = layoutInflater.inflate(R.layout.popup, null);  
+			    final PopupWindow mPopupWindow2 = new PopupWindow(popupView,LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT); 
+			    mPopupWindow2.setTouchable(true);
+		        mPopupWindow2.setOutsideTouchable(true);
+		        mPopupWindow2.setFocusable(true);;
+			    ImageView popImg2 = (ImageView)popupView.findViewById(R.id.popupImageView);
+			    //mPopupWindow2.showAsDropDown(views[1]);
+			    mPopupWindow2.showAtLocation(views[1], Gravity.CENTER, 0, 0);
+			    popupView.setOnTouchListener(new View.OnTouchListener() {
+					
+					@Override
+					public boolean onTouch(View v, MotionEvent event) {
+						// TODO Auto-generated method stub
+						switch (event.getAction() & MotionEvent.ACTION_MASK) {
+						case MotionEvent.ACTION_DOWN:
+							mPopupWindow2.dismiss();
+						}
+						return false;
+					}
+				});
+			    popImg2.setImageBitmap(originalImages[1]);
+				break;
+			case R.id.imageView3:
+				layoutInflater = (LayoutInflater)getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);  
+			    popupView = layoutInflater.inflate(R.layout.popup, null);  
+			    final PopupWindow mPopupWindow3 = new PopupWindow(popupView,LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT); 
+			    mPopupWindow3.setTouchable(true);
+		        mPopupWindow3.setOutsideTouchable(true);
+		        mPopupWindow3.setFocusable(true);;
+			    ImageView popImg3 = (ImageView)popupView.findViewById(R.id.popupImageView);
+			    //mPopupWindow3.showAsDropDown(views[2]);
+			    mPopupWindow3.showAtLocation(views[2], Gravity.CENTER, 0, 0);
+			    popupView.setOnTouchListener(new View.OnTouchListener() {
+					
+					@Override
+					public boolean onTouch(View v, MotionEvent event) {
+						// TODO Auto-generated method stub
+						switch (event.getAction() & MotionEvent.ACTION_MASK) {
+						case MotionEvent.ACTION_DOWN:
+							mPopupWindow3.dismiss();
+						}
+						return false;
+					}
+				});
+			    popImg3.setImageBitmap(originalImages[2]);
+				break;
+			case R.id.imageView4:
+				layoutInflater = (LayoutInflater)getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);  
+			    popupView = layoutInflater.inflate(R.layout.popup, null);  
+			    final PopupWindow mPopupWindow4 = new PopupWindow(popupView,LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT); 
+			    mPopupWindow4.setTouchable(true);
+		        mPopupWindow4.setOutsideTouchable(true);
+		        mPopupWindow4.setFocusable(true);;
+			    ImageView popImg4 = (ImageView)popupView.findViewById(R.id.popupImageView);
+			    //mPopupWindow4.showAsDropDown(views[3]);
+			    mPopupWindow4.showAtLocation(views[3], Gravity.CENTER, 0, 0);
+			    popupView.setOnTouchListener(new View.OnTouchListener() {
+					
+					@Override
+					public boolean onTouch(View v, MotionEvent event) {
+						// TODO Auto-generated method stub
+						switch (event.getAction() & MotionEvent.ACTION_MASK) {
+						case MotionEvent.ACTION_DOWN:
+							mPopupWindow4.dismiss();
+						}
+						return false;
+					}
+				});
+			    popImg4.setImageBitmap(originalImages[3]);
 				break;
 			}
 		}
@@ -407,7 +538,9 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 				ArrayList<Bitmap> pictures = new ArrayList<Bitmap>();	
 				int imageSetting = Integer.parseInt(Settings.getNumber(getApplicationContext()));
 				
-						
+				originalImages = new Bitmap[imageSetting];	
+				bitMapArray = new Bitmap[imageSetting];
+				
 				for(int i = 0; i < imageSetting; i ++)
 				{
 					URL URL = null;
@@ -419,9 +552,20 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 					}
 					try {
 						Bitmap bitmap = BitmapFactory.decodeStream(URL.openConnection().getInputStream());
+						//originalImages[i] = bitmap;
 						if(bitmap != null)
-						{
-							Bitmap resizedbitmap = Bitmap.createScaledBitmap(bitmap, 120, 120, true);
+						{					
+							int width = bitmap.getWidth();
+							int height = bitmap.getHeight();
+							Bitmap resizedbitmap = bitmap;
+							while(width > 800 || height > 800){
+								width *= 0.8;
+								height *= 0.8;
+								resizedbitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
+							}
+							originalImages[i] = resizedbitmap;
+							resizedbitmap = Bitmap.createScaledBitmap(bitmap, 120, 120, true);
+							bitMapArray[i] = resizedbitmap;
 							pictures.add(resizedbitmap);
 						}
 						else
@@ -443,8 +587,8 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 					Log.d("Post", "BMP null");
 					return;
 				}
-				bitMapArray = new Bitmap[bmp.size()];
-				ImageView[] views = new ImageView[4];
+				
+				//ImageView[] views = new ImageView[4];
 				views[0] = (ImageView)findViewById(R.id.imageView1);
 				views[1] = (ImageView)findViewById(R.id.imageView2);
 				views[2] = (ImageView)findViewById(R.id.imageView3);
@@ -452,7 +596,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 				int imageSetting = Integer.parseInt(Settings.getNumber(getApplicationContext()));	
 				for(int i = 0; i < imageSetting && i < bmp.size(); i ++)
 				{
-					bitMapArray[i] = bmp.get(i);
+					//bitMapArray[i] = bmp.get(i);
 					views[i].setImageBitmap(bmp.get(i));
 				}
 				startTime();
