@@ -88,38 +88,11 @@ public class Dictionary
 	{
 		index = i;
 	}
-//	public void nextWord()
-//	{
-//		//if this isn't the first time we are picking a word remove the previous word from the dictionary
-//		if(index != -1)
-//		{
-//			usedwords.add(dictionary.remove(index));
-//		}
-//		
-//		//if we've used all the words, recycle used words
-//		if(dictionary.size() == 0)
-//		{
-//			//swap the empty dictionary with the words used
-//			dictionary = usedwords;
-//			usedwords = new ArrayList<String>(); //empty used words
-//		}
-//		
-//		if(dictionary.size()-1 != 0)
-//		{
-//			index = rand.nextInt(dictionary.size()-1);
-//		}
-//		else
-//		{
-//			index = 0;
-//		}
-//	}
 	
 	public void nextWord()
 	{
-		if(index < dictionary.size())
-		{
-			index ++;
-		}
+			index++;
+			index = index%dictionary.size();
 	}
 }
 
