@@ -12,6 +12,7 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +20,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.hardware.input.InputManager;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,6 +34,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -200,7 +204,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
                 });
                 try {
                     Thread.sleep(100);
-                } catch (InterruptedException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 
@@ -271,8 +275,8 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 					}
 				});
 				try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
+                    Thread.sleep(2000);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 			}
@@ -363,6 +367,8 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.button1:
+				InputMethodManager inputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+				inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 				checkGuess();
 				break;
 			case R.id.imageView1:
@@ -524,14 +530,14 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 				String data = null;
 				try {
 					data = ((new GoogleImageHTTPClient()).getImageData(params[0]));
-				} catch (IOException e1) {
+				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
-				Log.d(TAG, data);
+				//Log.d(TAG, data);
 				Image image = null;
 				try {
 					image = (new ImageParser(data)).getImage();
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 					Log.d(TAG, "Image parse error");
 				}
@@ -546,7 +552,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 					URL URL = null;
 					try {
 						URL = new URL(image.getLinks().get(i));
-					} catch (MalformedURLException e) {
+					} catch (Exception e) {
 						e.printStackTrace();
 						Log.d(TAG, "URL Failed");
 					}
@@ -558,7 +564,7 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 							int width = bitmap.getWidth();
 							int height = bitmap.getHeight();
 							Bitmap resizedbitmap = bitmap;
-							while(width > 800 || height > 800){
+							while(width > 1000 || height > 1000){
 								width *= 0.8;
 								height *= 0.8;
 								resizedbitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
@@ -572,9 +578,16 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 						{
 							pictures.add(bitmap);	
 						}	
-					} catch (IOException e) {
+					} catch (Exception e) {
 						e.printStackTrace();
 						Log.d(TAG, "Bitmap Failed");
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						return doInBackground(params);
 					}
 				}	
 				unReload();
