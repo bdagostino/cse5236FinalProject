@@ -110,6 +110,13 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginTop="6dp" >
+            
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/btn_default"
+                android:text="Guess" />
 
             <EditText
                 android:id="@+id/editText1"
@@ -121,12 +128,7 @@
                 <requestFocus />
             </EditText>
 
-            <Button
-                android:id="@+id/button1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:drawable/btn_default"
-                android:text="Guess" />
+            
 
         </TableLayout>
 
