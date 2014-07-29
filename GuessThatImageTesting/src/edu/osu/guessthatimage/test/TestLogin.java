@@ -32,7 +32,7 @@ public class TestLogin extends ActivityInstrumentationTestCase2<LoginScreen> {
 		String username = "Test";
 		String password = "Me";
 		solo.clickOnButton("Sign up new account");
-		solo.waitForActivity("edu.osu.guessthatimage.SignUp", 3000);
+		solo.waitForActivity("edu.osu.guessthatimage.SignUp", 1000);
 		solo.assertCurrentActivity("The Activity Should Be SignUp Menu", "SignUp");
 		EditText userNameEditableField = (EditText) solo.getView(R.id.new_username);
 		EditText passwordEditableField = (EditText) solo.getView(R.id.new_password);
@@ -59,7 +59,7 @@ public class TestLogin extends ActivityInstrumentationTestCase2<LoginScreen> {
 		solo.enterText(passwordEditableField,String.valueOf(password));
 		
 		solo.clickOnButton("Login");
-		solo.waitForActivity("edu.osu.guessthatimage.OptionMenu", 3000);
+		solo.waitForActivity("edu.osu.guessthatimage.OptionMenu", 1000);
 		solo.assertCurrentActivity("The Activity Should Be Option Menu", "OptionMenu");
 		
 		
