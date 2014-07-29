@@ -1,0 +1,42 @@
+package edu.osu.guessthatimage.test;
+
+import android.test.ActivityInstrumentationTestCase2;
+import android.widget.EditText;
+
+import com.robotium.solo.Solo;
+
+import edu.osu.guessthatimage.LoginScreen;
+import edu.osu.guessthatimage.OptionMenu;
+import edu.osu.guessthatimage.Game;
+import edu.osu.guessthatimage.R;
+import junit.framework.TestCase;
+
+//Test Use Case 5
+public class TestGame extends ActivityInstrumentationTestCase2<Game> 
+{
+	private Solo solo;
+		
+		public TestGame(){
+			super(Game.class);
+		}
+		
+		@Override 
+		protected void setUp() throws Exception{
+			super.setUp(); 
+			solo= new Solo(getInstrumentation(),getActivity());
+		}
+		
+		@Override 
+		protected void tearDown() throws Exception{
+			solo.finishOpenedActivities();
+		}
+		
+		public void test_1_gameStart()
+		{
+			//Enter Correct Guess			
+			solo.clearEditText(guessField); 
+			solo.enterText(guessField,String.valueOf(username));
+			//Guess
+			solo.clickOnButton("Guess");
+		}	
+}

@@ -46,6 +46,16 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 
 	private static TextView timeNum;
 	private int currentTime = 10;
+	public int GetCurrentTime()
+	{
+		return currentTime;
+	}
+	
+	public void SetCurrentTime(int value)
+	{
+		currentTime = value;
+	}
+	
 	private static TextView scoreNum;
 	private int currentScore = 0;
 	private static TextView loadingTip;

@@ -10,6 +10,7 @@ import edu.osu.guessthatimage.R;
 import edu.osu.guessthatimage.LoginScreen;
 import edu.osu.guessthatimage.OptionMenu;
 
+//Test Use Case 1, 2, and 3
 public class TestLogin extends ActivityInstrumentationTestCase2<LoginScreen> {
 	private Solo solo;
 	
@@ -28,6 +29,7 @@ public class TestLogin extends ActivityInstrumentationTestCase2<LoginScreen> {
 		solo.finishOpenedActivities();
 	}
 	
+	//Use Case 3
 	public void test_1_setup_account(){
 		String username = "Test";
 		String password = "Me";
@@ -48,6 +50,7 @@ public class TestLogin extends ActivityInstrumentationTestCase2<LoginScreen> {
 		
 	}
 	
+	//Use Case 2
 	public void test_2_login_correct(){
 		String username = "Test";
 		String password = "Me";
@@ -60,8 +63,6 @@ public class TestLogin extends ActivityInstrumentationTestCase2<LoginScreen> {
 		
 		solo.clickOnButton("Login");
 		solo.waitForActivity("edu.osu.guessthatimage.OptionMenu", 1000);
-		solo.assertCurrentActivity("The Activity Should Be Option Menu", "OptionMenu");
-		
-		
+		solo.assertCurrentActivity("The Activity Should Be Option Menu", "OptionMenu");		
 	}
 }

@@ -11,6 +11,7 @@ import edu.osu.guessthatimage.Game;
 import edu.osu.guessthatimage.R;
 import junit.framework.TestCase;
 
+//Use Case 4
 public class TestOptionMenu extends ActivityInstrumentationTestCase2<OptionMenu> {
 private Solo solo;
 	
