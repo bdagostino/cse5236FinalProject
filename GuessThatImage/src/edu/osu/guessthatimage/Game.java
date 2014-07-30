@@ -46,16 +46,6 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 
 	private static TextView timeNum;
 	private int currentTime = 10;
-	public int GetCurrentTime()
-	{
-		return currentTime;
-	}
-	
-	public void SetCurrentTime(int value)
-	{
-		currentTime = value;
-	}
-	
 	private static TextView scoreNum;
 	private int currentScore = 0;
 	private static TextView loadingTip;
@@ -149,7 +139,15 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 	//////////////////////////////////////////
 	//////////////////Timer///////////////////
 	//////////////////////////////////////////
+	public int GetCurrentTime()
+	{
+		return currentTime;
+	}
 
+	public void SetCurrentTime(int value)
+	{
+		currentTime = value;
+	}
 	private Handler timeHandler = new Handler();
 	private Handler scoreHandler = new Handler();
 
@@ -287,11 +285,11 @@ public class Game extends Activity implements OnClickListener, AccelerometerList
 			currentWord = currentWord.replace(" ", "");
 			if(temp.equals(currentWord))
 			{
+				Crouton.showText(this, "Correct (+2)", Style.INFO);
 				System.out.println("Correct guess");
 				playerScore.correctAnswer();
 				guessField.setText("CORRECT");
 				dictionary.nextWord();
-				Crouton.showText(this, "Correct (+2)", Style.INFO);
 				//Crouton.showText(this, "Loading...", Style.INFO);
 				new JSONWeatherTask().execute(dictionary.getCurrentWord());
 				//Crouton.showText(this, "Now Guess!", Style.INFO);

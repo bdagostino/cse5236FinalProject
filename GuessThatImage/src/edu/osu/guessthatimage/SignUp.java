@@ -2,6 +2,9 @@ package edu.osu.guessthatimage;
 
 import java.util.List;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -10,7 +13,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class SignUp extends Activity implements OnClickListener {
 	
@@ -56,8 +58,7 @@ public class SignUp extends Activity implements OnClickListener {
 			if(records.size() == 0){
 				this.accountDb.insert(username, password);
 			// this.labResult.setText("Added");
-				Toast.makeText(SignUp.this, "new record inserted",
-						Toast.LENGTH_SHORT).show();
+				Crouton.showText(this, "Account created", Style.INFO);
 				finish();
 			}
 			else{
@@ -76,8 +77,7 @@ public class SignUp extends Activity implements OnClickListener {
 			}
 		} else if ((username.equals("")) || (password.equals(""))
 				|| (confirm.equals(""))) {
-			Toast.makeText(SignUp.this, "Missing entry", Toast.LENGTH_SHORT)
-					.show();
+			Crouton.showText(this, "Invalid information entered", Style.ALERT);
 			etUsername.setText("");
 			etPassword.setText("");
 			etConfirm.setText("");

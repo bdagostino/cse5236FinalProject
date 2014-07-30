@@ -80,7 +80,8 @@ public class TestGame extends ActivityInstrumentationTestCase2<Game>
 			//Make the remaining time equal 1 second so we dont have to wait
 			((Game)solo.getCurrentActivity()).SetCurrentTime(1);
 			//Wait for the game to transition to leaderboard or too much time has passed
-			solo.waitForActivity("edu.osu.guessthatimage.LeaderBoard",5000);
+			// Note depending on how fast the net is, this may not be enough time for the images to load
+			solo.waitForActivity("edu.osu.guessthatimage.LeaderBoard",15000);
 			//Check to make sure the currennt activity is the leaderboard
 			solo.assertCurrentActivity("Should Be LeaderBoard", "LeaderBoard");	
 		}
